@@ -1,6 +1,6 @@
 # GitHub
 
-A Swift library for interacting with the GitHub v4 GraphQL APIs
+A Swift library for interacting with the GitHub v3 REST APIs
 
 # Authorizing GitHub
 
