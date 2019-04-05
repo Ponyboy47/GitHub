@@ -3,6 +3,9 @@ import NIO
 
 public var numberOfThreads = 2
 public let URLPathSeparator = "/"
+public let githubPerPageDefault = 30
+public let githubPerPageMax = 100
+public var githubPerPage = githubPerPageDefault
 public let defaultAPIHeaders: HTTPHeaders = [
     "Accept": "application/vnd.github.v3+json",
     "User-Agent": "GitHubAPI-SPM-Library"
@@ -14,14 +17,44 @@ public protocol GitHubAPICategory: AnyObject {
     init(connector: GitHubConnector)
 }
 
-public protocol HTTPRequestRepresentable {
-    static var isBody: Bool { get }
-    func stringRepresentation() -> String
+public protocol GitHubRequestData {}
+
+extension HTTPBody: GitHubRequestData {}
+public struct URLQuery: GitHubRequestData {
+    private var query: String = ""
+
+    public mutating func add(option key: String, value: String) {
+        if !query.isEmpty {
+            query += "&"
+        }
+        query += "\(key)=\(value)"
+    }
+
+    public mutating func add<T: RawRepresentable>(option key: String, value: T) where T.RawValue == String {
+        if !query.isEmpty {
+            query += "&"
+        }
+        query += "\(key)=\(value.rawValue)"
+    }
+
+    public mutating func add(flag: String, if bool: Bool) {
+        guard bool else { return }
+
+        if !query.isEmpty {
+            query += "&"
+        }
+        query += flag
+    }
+
+    public func url(base: String) -> String {
+        return "\(base)?\(query)"
+    }
 }
 
 public protocol GitHubAPI {
     associatedtype Category: GitHubAPICategory
-    associatedtype Options: HTTPRequestRepresentable
+    associatedtype Options: GitHubRequestData
+    associatedtype Response: GitHubResponse
 
     static var name: String { get }
     static var endpoint: String { get }
@@ -31,37 +64,42 @@ public protocol GitHubAPI {
     var connector: GitHubConnector { get }
 
     init(connector: GitHubConnector)
+
+    func generateRequest(options: Options) -> HTTPRequest
 }
 
 public extension GitHubAPI {
-    public static var name: String { return "\(Self.self)" }
+    static var name: String { return "\(Self.self)" }
 
-    public static func buildURLPath() -> String {
+    static func buildURLPath() -> String {
         return Category.endpoint + URLPathSeparator + Self.endpoint
     }
 
-    public static func call(options: Options, page: Int = 1, perPage: Int = 30) throws -> Future<GitHubResponse> {
+    func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) throws -> Future<Response> {
         let page = page.clamped(to: 1...Int.max)
-        let perPage = perPage.clamped(to: 1...100)
+        let perPage = perPage.clamped(to: 1...githubPerPageMax)
         fatalError("Not implemented")
     }
 }
 
-public final class GitHubResponse: HTTPMessage {
-    public var method: HTTPMethod = .GET
-    public var version = HTTPVersion(major: 2, minor: 0)
-    public var headers: HTTPHeaders = ["Accept": "application/vnd.github.v3+json"]
-    public var body: HTTPBody = .empty
-    public var channel: Channel? = nil
-    public var description: String {
-        return "\(type(of: self))()"
+extension GitHubAPI where Options == HTTPBody {
+    public func generateRequest(options: Options) -> HTTPRequest {
+        return .init(method: Self.method, url: Self.buildURLPath(), headers: defaultAPIHeaders, body: options)
     }
+}
 
-    public init() {}
+extension GitHubAPI where Options == URLQuery {
+    public func generateRequest(options: Options) -> HTTPRequest {
+        return .init(method: Self.method, url: options.url(base: Self.buildURLPath()), headers: defaultAPIHeaders)
+    }
+}
+
+public protocol GitHubResponse {
+    init(response: HTTPResponse)
 }
 
 public final class GitHubConnector {
-    private static let worker = MultiThreadedEventLoopGroup(numberOfThreads: numberOfThreads)
+    private let worker = MultiThreadedEventLoopGroup(numberOfThreads: numberOfThreads)
 
     private let auth: GitHubAuth?
 
@@ -69,7 +107,7 @@ public final class GitHubConnector {
         self.auth = auth
     }
 
-    private static func connect() throws -> HTTPClient {
+    private func connect() throws -> HTTPClient {
         return try HTTPClient.connect(scheme: .https, hostname: "api.github.com", on: worker).wait()
     }
 }
