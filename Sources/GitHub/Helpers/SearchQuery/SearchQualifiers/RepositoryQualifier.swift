@@ -33,72 +33,33 @@ public extension RepositoryQualifier {
 
 // MARK: Support repository size qualifiers
 public extension RepositoryQualifier {
-    enum Size: RawRepresentable, ExpressibleByIntegerLiteral, Comparable {
-        public var rawValue: Int {
-            switch self {
-            case .bytes(let value): return value / 1024
-            case .kilobytes(let value): return value
-            case .megabytes(let value): return value * 1024
-            case .gigabytes(let value): return value * 1024 * 1024
-            }
-        }
-
-        case bytes(Int)
-        case kilobytes(Int)
-        case megabytes(Int)
-        case gigabytes(Int)
-
-        public init(rawValue: Int) {
-            self = .kilobytes(rawValue)
-        }
-        public init(integerLiteral value: Int) {
-            self.init(rawValue: value)
-        }
-
-        public static func < (lhs: Size, rhs: Size) -> Bool {
-            return lhs.rawValue < rhs.rawValue
-        }
+    static func size(equals size: ByteSize) -> RepositoryQualifier {
+        return .init(rawValue: "size:\(size.kb)")
     }
-
-    static func size(equals size: Size) -> RepositoryQualifier {
-        return .init(rawValue: "size:\(size.rawValue)")
+    static func size(greaterThan size: ByteSize) -> RepositoryQualifier {
+        return .init(rawValue: "size:>\(size.kb)")
     }
-    static func size(greaterThan size: Size) -> RepositoryQualifier {
-        return .init(rawValue: "size:>\(size.rawValue)")
+    static func size(greaterThanOrEqualTo size: ByteSize) -> RepositoryQualifier {
+        return .init(rawValue: "size:>=\(size.kb)")
     }
-    static func size(greaterThanOrEqualTo size: Size) -> RepositoryQualifier {
-        return .init(rawValue: "size:>=\(size.rawValue)")
+    static func size(lessThan size: ByteSize) -> RepositoryQualifier {
+        return .init(rawValue: "size:<\(size.kb)")
     }
-    static func size(lessThan size: Size) -> RepositoryQualifier {
-        return .init(rawValue: "size:<\(size.rawValue)")
+    static func size(lessThanOrEqualTo size: ByteSize) -> RepositoryQualifier {
+        return .init(rawValue: "size:<=\(size.kb)")
     }
-    static func size(lessThanOrEqualTo size: Size) -> RepositoryQualifier {
-        return .init(rawValue: "size:<=\(size.rawValue)")
+    static func size(between lowerBound: ByteSize, and upperBound: ByteSize) -> RepositoryQualifier {
+        return .init(rawValue: "size:\(lowerBound.kb)..\(upperBound.kb)")
     }
-    static func size(between lowerBound: Size, and upperBound: Size) -> RepositoryQualifier {
-        return .init(rawValue: "size:\(lowerBound.rawValue)..\(upperBound.rawValue)")
-    }
-    static func size(in range: ClosedRange<Size>) -> RepositoryQualifier {
+    static func size(in range: ClosedRange<ByteSize>) -> RepositoryQualifier {
         return .size(between: range.lowerBound, and: range.upperBound)
     }
-    static func size(in range: PartialRangeThrough<Size>) -> RepositoryQualifier {
+    static func size(in range: PartialRangeThrough<ByteSize>) -> RepositoryQualifier {
         return .size(lessThanOrEqualTo: range.upperBound)
     }
-    static func size(in range: PartialRangeFrom<Size>) -> RepositoryQualifier {
+    static func size(in range: PartialRangeFrom<ByteSize>) -> RepositoryQualifier {
         return .size(greaterThanOrEqualTo: range.lowerBound)
     }
-}
-
-public extension Int {
-    var bytes: RepositoryQualifier.Size { return .bytes(self) }
-    var kilobytes: RepositoryQualifier.Size { return .kilobytes(self) }
-    var megabytes: RepositoryQualifier.Size { return .megabytes(self) }
-    var gigabytes: RepositoryQualifier.Size { return .gigabytes(self) }
-
-    var b: RepositoryQualifier.Size { return bytes }
-    var kb: RepositoryQualifier.Size { return kilobytes }
-    var mb: RepositoryQualifier.Size { return megabytes }
-    var gb: RepositoryQualifier.Size { return gigabytes }
 }
 
 // MARK: Support forks qualifiers

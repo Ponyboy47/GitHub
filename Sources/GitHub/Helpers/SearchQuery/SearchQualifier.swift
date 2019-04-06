@@ -113,3 +113,53 @@ public extension SearchQualifier {
         return .init(rawValue: raw)
     }
 }
+
+public struct ByteSize: RawRepresentable, ExpressibleByIntegerLiteral, Equatable, Comparable {
+    public let rawValue: Int
+
+    public var bytes: Int { return rawValue }
+    public var kilobytes: Int { return rawValue * 1024 }
+    public var megabytes: Int { return kilobytes * 1024 }
+    public var gigabytes: Int { return gigabytes * 1024 }
+
+    public var b: Int { return bytes }
+    public var kb: Int { return kilobytes }
+    public var mb: Int { return megabytes }
+    public var gb: Int { return gigabytes }
+
+    public static func bytes(_ value: Int) -> ByteSize {
+        return .init(rawValue: value)
+    }
+    public static func kilobytes(_ value: Int) -> ByteSize {
+        return .init(rawValue: value * 1024)
+    }
+    public static func megabytes(_ value: Int) -> ByteSize {
+        return .init(rawValue: value * 1024 * 1024)
+    }
+    public static func gigabytes(_ value: Int) -> ByteSize {
+        return .init(rawValue: value * 1024 * 1024 * 1024)
+    }
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+    public init(integerLiteral value: Int) {
+        self.init(rawValue: value)
+    }
+
+    public static func < (lhs: ByteSize, rhs: ByteSize) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+}
+
+public extension Int {
+    var bytes: ByteSize { return .bytes(self) }
+    var kilobytes: ByteSize { return .kilobytes(self) }
+    var megabytes: ByteSize { return .megabytes(self) }
+    var gigabytes: ByteSize { return .gigabytes(self) }
+
+    var b: ByteSize { return bytes }
+    var kb: ByteSize { return kilobytes }
+    var mb: ByteSize { return megabytes }
+    var gb: ByteSize { return gigabytes }
+}
