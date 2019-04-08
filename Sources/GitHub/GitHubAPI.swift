@@ -76,7 +76,7 @@ public struct URLQuery: GitHubRequestData {
 public protocol GitHubAPI {
     associatedtype Category: GitHubAPICategory
     associatedtype Options: GitHubRequestData
-    associatedtype Element: Decodable
+    associatedtype Element: GitHubResponseElement
     associatedtype Response: GitHubResponseRepresentable = GitHubResponse<Element>
 
     static var name: String { get }
@@ -164,6 +164,10 @@ public struct GitHubResponse<T: Decodable>: GitHubResponseRepresentable {
     public let total: Int
     public let incompleteResults: Bool
     public let items: [T]
+}
+
+public protocol GitHubResponseElement: Decodable {
+    var score: Double? { get }
 }
 
 public final class GitHubConnector {

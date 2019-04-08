@@ -50,5 +50,33 @@ public final class SearchCode: GitHubAPI {
     }
 }
 
-public struct Code: Decodable {
+public struct Code: GitHubResponseElement {
+    public let name: String
+    public let path: String
+    public let sha: String
+    public let url: URL
+    public lazy var urls: CodeURLs = {
+        return CodeURLs(git: _git,
+                        html: _html)
+    }()
+    public let _git: URL
+    public let _html: URL
+    public let repository: Repository
+    public let score: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case path
+        case sha
+        case url
+        case _git = "git_url"
+        case _html = "html_url"
+        case repository
+        case score
+    }
+}
+
+public struct CodeURLs {
+    public let git: URL
+    public let html: URL
 }

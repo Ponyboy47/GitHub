@@ -36,11 +36,11 @@ extension IssueQualifier: OrganizationQualifiable {}
 extension IssueQualifier: RepositoryQualifiable {}
 
 // MARK: Support qualifying by issue state
+public enum IssueState: String, Decodable {
+    case `open`
+    case closed
+}
 public extension IssueQualifier {
-    enum IssueState: String {
-        case `open`
-        case closed
-    }
     static func `is`(_ state: IssueState) -> IssueQualifier {
         return .init(rawValue: "is:\(state.rawValue)")
     }

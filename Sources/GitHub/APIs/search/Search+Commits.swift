@@ -51,22 +51,22 @@ public final class SearchCommits: GitHubAPI {
     }
 }
 
-public struct Commit: Decodable {
+public struct Commit: GitHubResponseElement {
     public let url: URL
     public let sha: String
-    public let htmlURL: URL
+    public let html: URL
     public let comments: URL
     public let commit: CommitInfo
     public let author: User
     public let committer: User
     public let parents: [Commit]
     public let repository: Repository
-    public let score: Double
+    public let score: Double?
 
     enum CodingKeys: String, CodingKey {
         case url
         case sha
-        case htmlURL = "html_url"
+        case html = "html_url"
         case comments = "comments_url"
         case commit
         case author
