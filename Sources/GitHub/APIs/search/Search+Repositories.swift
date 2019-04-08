@@ -15,7 +15,14 @@ public final class SearchRepositories: GitHubAPI {
     }
 
     public struct Response: GitHubResponse {
-        public init(response: HTTPResponse) {
+        public let totalCount: Int
+        public let incompleteResults: Bool
+        public let items: [Repository]
+
+        private enum CodingKeys: String, CodingKey {
+            case totalCount = "total_count"
+            case incompleteResults = "incomplete_results"
+            case items
         }
     }
 
@@ -33,7 +40,7 @@ public final class SearchRepositories: GitHubAPI {
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
                       page: Int = 1,
-                      perPage: Int = githubPerPage) throws -> Future<Response> {
+                      perPage: Int = githubPerPage) throws -> Response {
         return try query(search.rawValue, sort: sort, order: order, page: page, perPage: perPage)
     }
 
@@ -41,7 +48,7 @@ public final class SearchRepositories: GitHubAPI {
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
                       page: Int = 1,
-                      perPage: Int = githubPerPage) throws -> Future<Response> {
+                      perPage: Int = githubPerPage) throws -> Response {
         var options = Options()
         options.add(option: "q", value: string)
         if order != .default {
@@ -54,5 +61,83 @@ public final class SearchRepositories: GitHubAPI {
         }
 
         return try call(options: options, page: page, perPage: perPage)
+    }
+}
+
+public struct Repository: Decodable {
+    public let id: Int
+    public let nodeID: String
+    public let name: String
+    public let fullName: String
+    public let owner: RepositoryOwner
+    public let `private`: Bool
+    public let htmlURL: URL
+    public let description: String
+    public let fork: Bool
+    public let url: URL
+    public let created: Date
+    public let updated: Date
+    public let pushed: Date
+    public let homepage: URL?
+    public let size: ByteSize
+    public let stargazers: Int
+    public let watchers: Int
+    public let language: String
+    public let forks: Int
+    public let openIssues: Int
+    public let masterBranch: String
+    public let defaultBranch: String
+    public let score: Double
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case nodeID = "node_id"
+        case name
+        case fullName = "full_name"
+        case owner
+        case `private`
+        case htmlURL = "html_url"
+        case description
+        case fork
+        case url
+        case created = "created_at"
+        case updated = "updated_at"
+        case pushed = "pushed_at"
+        case homepage
+        case size
+        case stargazers = "stargazers_count"
+        case watchers = "watchers_count"
+        case language
+        case forks = "forks_count"
+        case openIssues = "open_issues_count"
+        case masterBranch = "master_branch"
+        case defaultBranch = "default_branch"
+        case score
+    }
+}
+
+public struct RepositoryOwner: Decodable {
+    public enum OwnerType: String, Decodable {
+        case user = "User"
+    }
+
+    public let login: String
+    public let id: Int
+    public let nodeID: String
+    public let avatar: URL
+    public let gravatarID: String
+    public let url: URL
+    public let receivedEvents: URL
+    public let type: OwnerType
+
+    enum CodingKeys: String, CodingKey {
+        case login
+        case id
+        case nodeID = "node_id"
+        case avatar = "avatar_url"
+        case gravatarID = "gravatar_id"
+        case url
+        case receivedEvents = "received_events_url"
+        case type
     }
 }

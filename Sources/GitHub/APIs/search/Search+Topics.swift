@@ -7,7 +7,7 @@ public final class SearchTopics: GitHubAPI {
     public typealias SortOptions = Void
 
     public struct Response: GitHubResponse {
-        public init(response: HTTPResponse) {
+        public init(response: Future<HTTPResponse>) throws {
         }
     }
 
@@ -23,13 +23,13 @@ public final class SearchTopics: GitHubAPI {
 
     public func query(_ search: SearchQuery<TopicQualifier>,
                       page: Int = 1,
-                      perPage: Int = githubPerPage) throws -> Future<Response> {
+                      perPage: Int = githubPerPage) throws -> Response {
         return try query(search.rawValue, page: page, perPage: perPage)
     }
 
     public func query(_ string: String,
                       page: Int = 1,
-                      perPage: Int = githubPerPage) throws -> Future<Response> {
+                      perPage: Int = githubPerPage) throws -> Response {
         var options = Options()
         options.add(option: "q", value: string)
 

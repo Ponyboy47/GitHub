@@ -12,8 +12,6 @@ public final class SearchCode: GitHubAPI {
     }
 
     public struct Response: GitHubResponse {
-        public init(response: HTTPResponse) {
-        }
     }
 
     public static let endpoint = "code"
@@ -30,7 +28,7 @@ public final class SearchCode: GitHubAPI {
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
                       page: Int = 1,
-                      perPage: Int = githubPerPage) throws -> Future<Response> {
+                      perPage: Int = githubPerPage) throws -> Response {
         return try query(search.rawValue, sort: sort, order: order, page: page, perPage: perPage)
     }
 
@@ -38,7 +36,7 @@ public final class SearchCode: GitHubAPI {
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
                       page: Int = 1,
-                      perPage: Int = githubPerPage) throws -> Future<Response> {
+                      perPage: Int = githubPerPage) throws -> Response {
         var options = Options()
         options.add(option: "q", value: string)
         if order != .default {

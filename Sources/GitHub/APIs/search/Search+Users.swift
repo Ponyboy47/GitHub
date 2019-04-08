@@ -14,7 +14,7 @@ public final class SearchUsers: GitHubAPI {
     }
 
     public struct Response: GitHubResponse {
-        public init(response: HTTPResponse) {
+        public init(response: Future<HTTPResponse>) throws {
         }
     }
 
@@ -32,7 +32,7 @@ public final class SearchUsers: GitHubAPI {
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
                       page: Int = 1,
-                      perPage: Int = githubPerPage) throws -> Future<Response> {
+                      perPage: Int = githubPerPage) throws -> Response {
         return try query(search.rawValue, sort: sort, order: order, page: page, perPage: perPage)
     }
 
@@ -40,7 +40,7 @@ public final class SearchUsers: GitHubAPI {
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
                       page: Int = 1,
-                      perPage: Int = githubPerPage) throws -> Future<Response> {
+                      perPage: Int = githubPerPage) throws -> Response {
         var options = Options()
         options.add(option: "q", value: string)
         if order != .default {
