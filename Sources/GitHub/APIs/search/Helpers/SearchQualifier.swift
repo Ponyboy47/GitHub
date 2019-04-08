@@ -114,7 +114,7 @@ public extension SearchQualifier {
     }
 }
 
-public struct ByteSize: RawRepresentable, ExpressibleByIntegerLiteral, Equatable, Comparable {
+public struct ByteSize: RawRepresentable, ExpressibleByIntegerLiteral, Equatable, Comparable, Codable {
     public let rawValue: Int
 
     public var bytes: Int { return rawValue }
