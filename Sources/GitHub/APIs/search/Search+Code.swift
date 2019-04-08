@@ -22,6 +22,16 @@ public final class SearchCode: GitHubAPI {
         self.connector = connector
     }
 
+    public func query(keywords: SearchKeyword = [],
+                      qualifiers: CodeQualifier,
+                      sort: SortOptions = .default,
+                      order: SortOrdering = .default,
+                      page: Int = 1,
+                      perPage: Int = githubPerPage) throws -> Response {
+        let query = SearchQuery(keywords: keywords, qualifiers: qualifiers).rawValue
+        return try self.query(query, sort: sort, order: order, page: page, perPage: perPage)
+    }
+
     public func query(_ search: SearchQuery<CodeQualifier>,
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,

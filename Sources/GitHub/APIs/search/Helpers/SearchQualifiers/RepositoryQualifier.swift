@@ -186,68 +186,70 @@ public extension RepositoryQualifier {
 }
 
 // MARK: Support 'license:qualifier'
-public extension RepositoryQualifier {
-    enum License: String {
-        case aflv3 = "afl-3.0"
-        public static let academicFreeLicense_v3 = License.aflv3
-        case apachev2 = "apache-2.0"
-        case artisticv2 = "artistic-2.0"
-        case bslv1 = "bsl-1.0"
-        public static let boostSoftwareLicense_v1 = License.bslv1
-        case bsd2Clause = "bsd-2-clause"
-        case bsd3Clause = "bsd-3-clause"
-        case bsd3ClauseClear = "bsd-3-clause-clear"
-        case cc
-        public static let creativeCommonsLicenseFamily = License.cc
-        case cc0v1 = "cc0-1.0"
-        public static let creativeCommonsZero_v1 = License.cc0v1
-        case ccByv4 = "cc-by-4.0"
-        public static let creativeCommonsAttribution_v4 = License.ccByv4
-        case ccBySAv4 = "cc-by-sa-4.0"
-        public static let creativeCommonsAttributionShareAlike_v4 = License.ccBySAv4
-        case wtfpl
-        public static let doWhatTheF_ckYouWantTo = License.wtfpl
-        case eclv2 = "ecl-2.0"
-        public static let educationalComunityLicense_v2 = License.eclv2
-        case eplv1 = "epl-1.0"
-        public static let eclipsePublicLicense_v1 = License.eplv1
-        case euplv1_1 = "eupl-1.1"
-        public static let  europeanUnionPublicLicense_v1_1 = License.euplv1_1
-        case agplv3 = "agpl-3.0"
-        public static let gnuAfferoGeneralPublicLicense_v3 = License.agplv3
-        case gpl
-        public static let gnuGeneralPublicLicenseFamily = License.gpl
-        case gplv2 = "gpl-2.0"
-        public static let gnuGeneralPublicLicense_v2 = License.gplv2
-        case gplv3 = "gpl-3.0"
-        public static let gnuGeneralPublicLicense_v3 = License.gplv3
-        case lgpl
-        public static let gnuLesserGeneralPublicLicenseFamily = License.gpl
-        case lgplv2_1 = "lgpl-2.1"
-        public static let gnuLesserGeneralPublicLicense_v2_1 = License.lgplv2_1
-        case lgplv3 = "lgpl-3.0"
-        public static let gnuLesserGeneralPublicLicense_v3 = License.lgplv3
-        case isc
-        case lpplv1_3c = "lppl-1.3c"
-        public static let laTeXProjectPublicLicense_v1_3c = License.lpplv1_3c
-        case mspl = "ms-pl"
-        public static let microsoftPublicLicense = License.mspl
-        case mit
-        case mplv2 = "mpl-2.0"
-        public static let mozillaPublicLicense_v2 = License.mplv2
-        case oslv3 = "osl-3.0"
-        public static let openSoftwareLicense_v3 = License.oslv3
-        case postgresql
-        case oflv1_1 = "ofl-1.1"
-        public static let silOpenFontLicense_v1_1 = License.oflv1_1
-        case ncsa
-        public static let universityOfIllinoisOpenSourceLicense = License.ncsa
-        public static let ncsaOpenSourceLicense = License.ncsa
-        case unlicense
-        case zlib
-    }
+public enum SupportedLicense: String, Decodable {
+    case aflv3 = "afl-3.0"
+    public static let academicFreeLicense_v3 = SupportedLicense.aflv3
+    case apachev2 = "apache-2.0"
+    case artisticv2 = "artistic-2.0"
+    case bslv1 = "bsl-1.0"
+    public static let boostSoftwareLicense_v1 = SupportedLicense.bslv1
+    case bsd2Clause = "bsd-2-clause"
+    case bsd3Clause = "bsd-3-clause"
+    case bsd3ClauseClear = "bsd-3-clause-clear"
+    case cc
+    public static let creativeCommonsLicenseFamily = SupportedLicense.cc
+    case cc0v1 = "cc0-1.0"
+    public static let creativeCommonsZero_v1 = SupportedLicense.cc0v1
+    case ccByv4 = "cc-by-4.0"
+    public static let creativeCommonsAttribution_v4 = SupportedLicense.ccByv4
+    case ccBySAv4 = "cc-by-sa-4.0"
+    public static let creativeCommonsAttributionShareAlike_v4 = SupportedLicense.ccBySAv4
+    case wtfpl
+    public static let doWhatTheF_ckYouWantTo = SupportedLicense.wtfpl
+    case eclv2 = "ecl-2.0"
+    public static let educationalComunityLicense_v2 = SupportedLicense.eclv2
+    case eplv1 = "epl-1.0"
+    public static let eclipsePublicLicense_v1 = SupportedLicense.eplv1
+    case euplv1_1 = "eupl-1.1"
+    public static let  europeanUnionPublicLicense_v1_1 = SupportedLicense.euplv1_1
+    case agplv3 = "agpl-3.0"
+    public static let gnuAfferoGeneralPublicLicense_v3 = SupportedLicense.agplv3
+    case gpl
+    public static let gnuGeneralPublicLicenseFamily = SupportedLicense.gpl
+    case gplv2 = "gpl-2.0"
+    public static let gnuGeneralPublicLicense_v2 = SupportedLicense.gplv2
+    case gplv3 = "gpl-3.0"
+    public static let gnuGeneralPublicLicense_v3 = SupportedLicense.gplv3
+    case lgpl
+    public static let gnuLesserGeneralPublicLicenseFamily = SupportedLicense.gpl
+    case lgplv2_1 = "lgpl-2.1"
+    public static let gnuLesserGeneralPublicLicense_v2_1 = SupportedLicense.lgplv2_1
+    case lgplv3 = "lgpl-3.0"
+    public static let gnuLesserGeneralPublicLicense_v3 = SupportedLicense.lgplv3
+    case isc
+    case lpplv1_3c = "lppl-1.3c"
+    public static let laTeXProjectPublicLicense_v1_3c = SupportedLicense.lpplv1_3c
+    case mspl = "ms-pl"
+    public static let microsoftPublicLicense = SupportedLicense.mspl
+    case mit
+    case mplv2 = "mpl-2.0"
+    public static let mozillaPublicLicense_v2 = SupportedLicense.mplv2
+    case oslv3 = "osl-3.0"
+    public static let openSoftwareLicense_v3 = SupportedLicense.oslv3
+    case postgresql
+    case oflv1_1 = "ofl-1.1"
+    public static let silOpenFontLicense_v1_1 = SupportedLicense.oflv1_1
+    case ncsa
+    public static let universityOfIllinoisOpenSourceLicense = SupportedLicense.ncsa
+    public static let ncsaOpenSourceLicense = SupportedLicense.ncsa
+    case unlicense
+    case zlib
 
-    static func license(_ license: License) -> RepositoryQualifier {
+    case other
+}
+
+public extension RepositoryQualifier {
+    static func license(_ license: SupportedLicense) -> RepositoryQualifier {
         return .init(rawValue: "license:\(license.rawValue)")
     }
 }

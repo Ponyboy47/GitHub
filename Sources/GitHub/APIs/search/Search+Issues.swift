@@ -36,6 +36,16 @@ public final class SearchIssues: GitHubAPI {
         self.connector = connector
     }
 
+    public func query(keywords: SearchKeyword = [],
+                      qualifiers: IssueQualifier,
+                      sort: SortOptions = .default,
+                      order: SortOrdering = .default,
+                      page: Int = 1,
+                      perPage: Int = githubPerPage) throws -> Response {
+        let query = SearchQuery(keywords: keywords, qualifiers: qualifiers).rawValue
+        return try self.query(query, sort: sort, order: order, page: page, perPage: perPage)
+    }
+
     public func query(_ search: SearchQuery<IssueQualifier>,
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
@@ -88,9 +98,9 @@ public struct Issue: GitHubResponseElement {
     public let assignee: User?
     public let milestone: String?
     public let comments: Int
-    public let created: Date
-    public let updated: Date
-    public let closed: Date
+    public let created: GitHubDate
+    public let updated: GitHubDate
+    public let closed: GitHubDate
     public let pullRequest: PullRequest
     public let body: String
     public let score: Double?

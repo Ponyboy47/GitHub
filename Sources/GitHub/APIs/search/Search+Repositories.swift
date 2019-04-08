@@ -25,6 +25,16 @@ public final class SearchRepositories: GitHubAPI {
         self.connector = connector
     }
 
+    public func query(keywords: SearchKeyword = [],
+                      qualifiers: RepositoryQualifier,
+                      sort: SortOptions = .default,
+                      order: SortOrdering = .default,
+                      page: Int = 1,
+                      perPage: Int = githubPerPage) throws -> Response {
+        let query = SearchQuery(keywords: keywords, qualifiers: qualifiers).rawValue
+        return try self.query(query, sort: sort, order: order, page: page, perPage: perPage)
+    }
+
     public func query(_ search: SearchQuery<RepositoryQualifier>,
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
@@ -58,8 +68,8 @@ public struct Repository: GitHubResponseElement {
     public let nodeID: String
     public let name: String
     public let fullName: String
-    public let owner: User
     public let `private`: Bool
+    public let owner: User
     public let description: String
     public let fork: Bool
     public let url: URL
@@ -100,56 +110,74 @@ public struct Repository: GitHubResponseElement {
                               notifications: _notifications,
                               labels: _labels,
                               releases: _releases,
-                              deployments: _deployments)
+                              deployments: _deployments,
+                              git: _git,
+                              ssh: _ssh,
+                              clone: _clone,
+                              svn: _svn,
+                              homepage: _homepage,
+                              mirror: _mirror)
     }()
     public let _html: URL
     public let _forks: URL
-    public let _keys: URL
-    public let _collaborators: URL
+    public let _keys: String
+    public let _collaborators: String
     public let _teams: URL
     public let _hooks: URL
-    public let _issueEvents: URL
+    public let _issueEvents: String
     public let _events: URL
-    public let _assignees: URL
-    public let _branches: URL
+    public let _assignees: String
+    public let _branches: String
     public let _tags: URL
-    public let _blobs: URL
-    public let _gitTags: URL
-    public let _gitRefs: URL
-    public let _trees: URL
-    public let _statuses: URL
+    public let _blobs: String
+    public let _gitTags: String
+    public let _gitRefs: String
+    public let _trees: String
+    public let _statuses: String
     public let _languages: URL
     public let _stargazers: URL
     public let _contributors: URL
     public let _subscribers: URL
     public let _subscription: URL
-    public let _commits: URL
-    public let _gitCommits: URL
-    public let _comments: URL
-    public let _issueComment: URL
-    public let _contents: URL
-    public let _compare: URL
+    public let _commits: String
+    public let _gitCommits: String
+    public let _comments: String
+    public let _issueComment: String
+    public let _contents: String
+    public let _compare: String
     public let _merges: URL
-    public let _archive: URL
+    public let _archive: String
     public let _downloads: URL
-    public let _issues: URL
-    public let _pulls: URL
-    public let _milestones: URL
-    public let _notifications: URL
-    public let _labels: URL
-    public let _releases: URL
+    public let _issues: String
+    public let _pulls: String
+    public let _milestones: String
+    public let _notifications: String
+    public let _labels: String
+    public let _releases: String
     public let _deployments: URL
-    public let created: Date
-    public let updated: Date
-    public let pushed: Date
-    public let homepage: URL?
+    public let _git: URL
+    public let _ssh: URL
+    public let _clone: URL
+    public let _svn: URL
+    public let _homepage: String?
+    public let _mirror: URL?
+    public let created: GitHubDate
+    public let updated: GitHubDate
+    public let pushed: GitHubDate
     public let size: ByteSize
     public let stargazers: Int
     public let watchers: Int
     public let language: String
+    public let hasIssues: Bool
+    public let hasProjects: Bool
+    public let hasDownloads: Bool
+    public let hasWiki: Bool
+    public let hasPages: Bool
     public let forks: Int
+    public let archived: Bool
+    public let disabled: Bool
     public let openIssues: Int
-    public let masterBranch: String
+    public let license: License?
     public let defaultBranch: String
     public let score: Double?
 
@@ -200,17 +228,29 @@ public struct Repository: GitHubResponseElement {
         case _labels = "labels_url"
         case _releases = "releases_url"
         case _deployments = "deployments_url"
+        case _git = "git_url"
+        case _ssh = "ssh_url"
+        case _clone = "clone_url"
+        case _svn = "svn_url"
+        case _homepage = "homepage"
+        case _mirror = "mirror_url"
         case created = "created_at"
         case updated = "updated_at"
         case pushed = "pushed_at"
-        case homepage
         case size
         case stargazers = "stargazers_count"
-        case watchers = "watchers_count"
+        case watchers
         case language
-        case forks = "forks_count"
-        case openIssues = "open_issues_count"
-        case masterBranch = "master_branch"
+        case hasIssues = "has_issues"
+        case hasProjects = "has_projects"
+        case hasDownloads = "has_downloads"
+        case hasWiki = "has_wiki"
+        case hasPages = "has_pages"
+        case forks
+        case archived
+        case disabled
+        case openIssues = "open_issues"
+        case license
         case defaultBranch = "default_branch"
         case score
     }
@@ -219,39 +259,61 @@ public struct Repository: GitHubResponseElement {
 public struct RepositoryURLs {
     public let html: URL
     public let forks: URL
-    public let keys: URL
-    public let collaborators: URL
+    public let keys: String
+    public let collaborators: String
     public let teams: URL
     public let hooks: URL
-    public let issueEvents: URL
+    public let issueEvents: String
     public let events: URL
-    public let assignees: URL
-    public let branches: URL
+    public let assignees: String
+    public let branches: String
     public let tags: URL
-    public let blobs: URL
-    public let gitTags: URL
-    public let gitRefs: URL
-    public let trees: URL
-    public let statuses: URL
+    public let blobs: String
+    public let gitTags: String
+    public let gitRefs: String
+    public let trees: String
+    public let statuses: String
     public let languages: URL
     public let stargazers: URL
     public let contributors: URL
     public let subscribers: URL
     public let subscription: URL
-    public let commits: URL
-    public let gitCommits: URL
-    public let comments: URL
-    public let issueComment: URL
-    public let contents: URL
-    public let compare: URL
+    public let commits: String
+    public let gitCommits: String
+    public let comments: String
+    public let issueComment: String
+    public let contents: String
+    public let compare: String
     public let merges: URL
-    public let archive: URL
+    public let archive: String
     public let downloads: URL
-    public let issues: URL
-    public let pulls: URL
-    public let milestones: URL
-    public let notifications: URL
-    public let labels: URL
-    public let releases: URL
+    public let issues: String
+    public let pulls: String
+    public let milestones: String
+    public let notifications: String
+    public let labels: String
+    public let releases: String
     public let deployments: URL
+    public let git: URL
+    public let ssh: URL
+    public let clone: URL
+    public let svn: URL
+    public let homepage: String?
+    public let mirror: URL?
+}
+
+public struct License: Decodable {
+    public let key: SupportedLicense
+    public let name: String
+    public let spdxID: String
+    public let url: URL?
+    public let nodeID: String
+
+    enum CodingKeys: String, CodingKey {
+        case key
+        case name
+        case spdxID = "spdx_id"
+        case url
+        case nodeID = "node_id"
+    }
 }

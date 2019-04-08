@@ -17,6 +17,14 @@ public final class SearchTopics: GitHubAPI {
         self.connector = connector
     }
 
+    public func query(keywords: SearchKeyword = [],
+                      qualifiers: RepositoryQualifier,
+                      page: Int = 1,
+                      perPage: Int = githubPerPage) throws -> Response {
+        let query = SearchQuery(keywords: keywords, qualifiers: qualifiers).rawValue
+        return try self.query(query, page: page, perPage: perPage)
+    }
+
     public func query(_ search: SearchQuery<TopicQualifier>,
                       page: Int = 1,
                       perPage: Int = githubPerPage) throws -> Response {
@@ -40,8 +48,8 @@ public struct Topic: GitHubResponseElement {
     public let description: String
     public let createdBy: String
     public let released: String
-    public let created: Date
-    public let updated: Date
+    public let created: GitHubDate
+    public let updated: GitHubDate
     public let featured: Bool
     public let curated: Bool
     public let score: Double?

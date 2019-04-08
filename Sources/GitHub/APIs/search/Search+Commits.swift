@@ -6,8 +6,8 @@ public final class SearchCommits: GitHubAPI {
     public typealias Element = Commit
 
     public enum SortOptions: String {
-        case authorDate = "author-date"
-        case committerDate = "committer-date"
+        case authorGitHubDate = "author-date"
+        case committerGitHubDate = "committer-date"
         case bestMatch = "best-match"
 
         public static let `default`: SortOptions = .bestMatch
@@ -21,6 +21,16 @@ public final class SearchCommits: GitHubAPI {
 
     public init(connector: GitHubConnector) {
         self.connector = connector
+    }
+
+    public func query(keywords: SearchKeyword = [],
+                      qualifiers: CommitQualifier,
+                      sort: SortOptions = .default,
+                      order: SortOrdering = .default,
+                      page: Int = 1,
+                      perPage: Int = githubPerPage) throws -> Response {
+        let query = SearchQuery(keywords: keywords, qualifiers: qualifiers).rawValue
+        return try self.query(query, sort: sort, order: order, page: page, perPage: perPage)
     }
 
     public func query(_ search: SearchQuery<CommitQualifier>,
@@ -96,7 +106,7 @@ public struct CommitInfo: Decodable {
 }
 
 public struct CommitUserInfo: Decodable {
-    public let date: Date
+    public let date: GitHubDate
     public let name: String
     public let email: String
 }

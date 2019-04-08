@@ -95,7 +95,7 @@ public extension GitHubAPI {
     static var name: String { return "\(Self.self)" }
 
     static func buildURLPath() -> String {
-        return Category.endpoint + URLPathSeparator + Self.endpoint
+        return URLPathSeparator + Category.endpoint + URLPathSeparator + Self.endpoint
     }
     static func buildURLPath(page: Int?, perPage: Int?) -> String {
         var query = ""
@@ -113,7 +113,7 @@ public extension GitHubAPI {
             query += "per_page=\(perPage)"
         }
 
-        return Category.endpoint + URLPathSeparator + Self.endpoint + query
+        return URLPathSeparator + Category.endpoint + URLPathSeparator + Self.endpoint + query
     }
 
     func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) -> Future<HTTPResponse> {
@@ -128,6 +128,9 @@ public extension GitHubAPI {
 
     func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) throws -> Response {
         let response = try call(options: options, page: page, perPage: perPage).wait()
+        guard response.status == .ok else {
+            fatalError("Response failed with status: \(response.status)")
+        }
         return try githubBodyDecoder.decode(Response.self, from: response.body.description)
     }
 }
@@ -159,8 +162,9 @@ public enum GitHubResponseKeys: String, CodingKey {
 public extension GitHubResponseRepresentable {
     typealias CodingKeys = GitHubResponseKeys
 }
-
 public struct GitHubResponse<T: Decodable>: GitHubResponseRepresentable {
+    public typealias CodingKeys = GitHubResponseKeys
+
     public let total: Int
     public let incompleteResults: Bool
     public let items: [T]

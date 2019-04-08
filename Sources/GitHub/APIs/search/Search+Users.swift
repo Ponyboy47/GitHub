@@ -24,6 +24,16 @@ public final class SearchUsers: GitHubAPI {
         self.connector = connector
     }
 
+    public func query(keywords: SearchKeyword = [],
+                      qualifiers: UserQualifier,
+                      sort: SortOptions = .default,
+                      order: SortOrdering = .default,
+                      page: Int = 1,
+                      perPage: Int = githubPerPage) throws -> Response {
+        let query = SearchQuery(keywords: keywords, qualifiers: qualifiers).rawValue
+        return try self.query(query, sort: sort, order: order, page: page, perPage: perPage)
+    }
+
     public func query(_ search: SearchQuery<UserQualifier>,
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
@@ -79,13 +89,13 @@ public struct User: GitHubResponseElement {
     public let _avatar: URL
     public let _html: URL
     public let _followers: URL
-    public let _following: URL
-    public let _gists: URL
-    public let _starred: URL
+    public let _following: String
+    public let _gists: String
+    public let _starred: String
     public let _subscriptions: URL
     public let _organizations: URL
     public let _repos: URL
-    public let _events: URL
+    public let _events: String
     public let _receivedEvents: URL
     public let type: UserType
     public let siteAdmin: Bool
@@ -118,12 +128,12 @@ public struct UserURLs {
     let avatar: URL
     let html: URL
     let followers: URL
-    let following: URL
-    let gists: URL
-    let starred: URL
+    let following: String
+    let gists: String
+    let starred: String
     let subscriptions: URL
     let organization: URL
     let repos: URL
-    let events: URL
+    let events: String
     let receivedEvents: URL
 }
