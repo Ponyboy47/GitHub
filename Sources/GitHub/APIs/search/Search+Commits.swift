@@ -3,6 +3,7 @@ import HTTP
 public final class SearchCommits: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
+    public typealias Element = Commit
 
     public enum SortOptions: String {
         case authorDate = "author-date"
@@ -10,18 +11,6 @@ public final class SearchCommits: GitHubAPI {
         case bestMatch = "best-match"
 
         public static let `default`: SortOptions = .bestMatch
-    }
-
-    public struct Response: GitHubResponse {
-        public let total: Int
-        public let incompleteResults: Bool
-        public let items: [Commit]
-
-        private enum CodingKeys: String, CodingKey {
-            case total = "total_count"
-            case incompleteResults = "incomplete_results"
-            case items
-        }
     }
 
     public static let endpoint = "commits"

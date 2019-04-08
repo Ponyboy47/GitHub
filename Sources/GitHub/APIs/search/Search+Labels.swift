@@ -3,6 +3,7 @@ import HTTP
 public final class SearchLabels: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
+    public typealias Element = Label
 
     public enum SortOptions: String {
         case created
@@ -10,11 +11,6 @@ public final class SearchLabels: GitHubAPI {
         case bestMatch = "best-match"
 
         public static let `default`: SortOptions = .bestMatch
-    }
-
-    public struct Response: GitHubResponse {
-        public init(response: Future<HTTPResponse>) throws {
-        }
     }
 
     public static let endpoint = "lables"
@@ -47,4 +43,7 @@ public final class SearchLabels: GitHubAPI {
 
         return try call(options: options, page: page, perPage: perPage)
     }
+}
+
+public struct Label: Decodable {
 }

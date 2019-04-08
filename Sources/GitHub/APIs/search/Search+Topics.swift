@@ -3,13 +3,9 @@ import HTTP
 public final class SearchTopics: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
+    public typealias Element = Topic
 
     public typealias SortOptions = Void
-
-    public struct Response: GitHubResponse {
-        public init(response: Future<HTTPResponse>) throws {
-        }
-    }
 
     public static let endpoint = "code"
     public static let requiresAuth = true
@@ -35,4 +31,7 @@ public final class SearchTopics: GitHubAPI {
 
         return try call(options: options, page: page, perPage: perPage)
     }
+}
+
+public struct Topic: Decodable {
 }

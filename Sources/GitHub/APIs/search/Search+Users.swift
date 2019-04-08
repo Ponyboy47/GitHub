@@ -3,6 +3,7 @@ import HTTP
 public final class SearchUsers: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
+    public typealias Element = User
 
     public enum SortOptions: String {
         case followers
@@ -11,11 +12,6 @@ public final class SearchUsers: GitHubAPI {
         case bestMatch = "best-match"
 
         public static let `default`: SortOptions = .bestMatch
-    }
-
-    public struct Response: GitHubResponse {
-        public init(response: Future<HTTPResponse>) throws {
-        }
     }
 
     public static let endpoint = "users"

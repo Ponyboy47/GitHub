@@ -76,7 +76,8 @@ public struct URLQuery: GitHubRequestData {
 public protocol GitHubAPI {
     associatedtype Category: GitHubAPICategory
     associatedtype Options: GitHubRequestData
-    associatedtype Response: GitHubResponse
+    associatedtype Element: Decodable
+    associatedtype Response: GitHubResponseRepresentable = GitHubResponse<Element>
 
     static var name: String { get }
     static var endpoint: String { get }
@@ -143,7 +144,27 @@ extension GitHubAPI where Options == URLQuery {
     }
 }
 
-public protocol GitHubResponse: Decodable {}
+public protocol GitHubResponseRepresentable: Decodable {
+    associatedtype Element: Decodable
+
+    var total: Int { get }
+    var incompleteResults: Bool { get }
+    var items: [Element] { get }
+}
+public enum GitHubResponseKeys: String, CodingKey {
+    case total = "total_count"
+    case incompleteResults = "incomplete_results"
+    case items
+}
+public extension GitHubResponseRepresentable {
+    typealias CodingKeys = GitHubResponseKeys
+}
+
+public struct GitHubResponse<T: Decodable>: GitHubResponseRepresentable {
+    public let total: Int
+    public let incompleteResults: Bool
+    public let items: [T]
+}
 
 public final class GitHubConnector {
     private let worker = MultiThreadedEventLoopGroup(numberOfThreads: numberOfThreads)

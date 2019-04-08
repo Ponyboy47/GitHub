@@ -3,6 +3,7 @@ import HTTP
 public final class SearchRepositories: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
+    public typealias Element = Repository
 
     public enum SortOptions: String {
         case stars
@@ -12,18 +13,6 @@ public final class SearchRepositories: GitHubAPI {
         case bestMatch = "best-match"
 
         public static let `default`: SortOptions = .bestMatch
-    }
-
-    public struct Response: GitHubResponse {
-        public let total: Int
-        public let incompleteResults: Bool
-        public let items: [Repository]
-
-        private enum CodingKeys: String, CodingKey {
-            case total = "total_count"
-            case incompleteResults = "incomplete_results"
-            case items
-        }
     }
 
     public static let endpoint = "repositories"

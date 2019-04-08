@@ -5,6 +5,7 @@ public typealias SearchPullRequests = SearchIssues
 public final class SearchIssues: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
+    public typealias Element = Issue
 
     public enum SortOptions: String {
         case comments
@@ -23,11 +24,6 @@ public final class SearchIssues: GitHubAPI {
         case bestMatch = "best-match"
 
         public static let `default`: SortOptions = .bestMatch
-    }
-
-    public struct Response: GitHubResponse {
-        public init(response: Future<HTTPResponse>) throws {
-        }
     }
 
     public static let endpoint = "code"
@@ -66,4 +62,7 @@ public final class SearchIssues: GitHubAPI {
 
         return try call(options: options, page: page, perPage: perPage)
     }
+}
+
+public struct Issue: Decodable {
 }

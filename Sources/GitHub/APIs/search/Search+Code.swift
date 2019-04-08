@@ -3,15 +3,13 @@ import HTTP
 public final class SearchCode: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
+    public typealias Element = Code
 
     public enum SortOptions: String {
         case indexed
         case bestMatch = "best-match"
 
         public static let `default`: SortOptions = .bestMatch
-    }
-
-    public struct Response: GitHubResponse {
     }
 
     public static let endpoint = "code"
@@ -50,4 +48,7 @@ public final class SearchCode: GitHubAPI {
 
         return try call(options: options, page: page, perPage: perPage)
     }
+}
+
+public struct Code: Decodable {
 }
