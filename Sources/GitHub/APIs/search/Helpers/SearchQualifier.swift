@@ -120,7 +120,7 @@ public struct ByteSize: RawRepresentable, ExpressibleByIntegerLiteral, Equatable
     public var bytes: Int { return rawValue }
     public var kilobytes: Int { return rawValue * 1024 }
     public var megabytes: Int { return kilobytes * 1024 }
-    public var gigabytes: Int { return gigabytes * 1024 }
+    public var gigabytes: Int { return megabytes * 1024 }
 
     public var b: Int { return bytes }
     public var kb: Int { return kilobytes }

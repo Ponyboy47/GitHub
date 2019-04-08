@@ -1,66 +1,29 @@
 import struct Foundation.Date
 
 public struct RepositoryQualifier: SearchQualifier {
+    public static let sizeKey: KeyPath<ByteSize, Int> = \ByteSize.kilobytes
+
     public var _qualifiers = Set<String>()
 
     public init() {}
 }
 
 // MARK: Support 'in:qualifier'
-public extension RepositoryQualifier {
-    enum InQualifier: String {
+extension RepositoryQualifier: InQualifiable {
+    public enum InQualifier: String {
         case name
         case description
         case readme
         case nameOrDescription = "name,description"
     }
-
-    static func `in`(_ qualifier: InQualifier) -> RepositoryQualifier {
-        return .init(rawValue: "in:\(qualifier.rawValue)")
-    }
 }
 
 // MARK: Support user and organization qualifiers
-public extension RepositoryQualifier {
-    static func user(_ username: String) -> RepositoryQualifier {
-        return .init(rawValue: "user:\(username)")
-    }
-
-    static func organization(_ organization: String) -> RepositoryQualifier {
-        return .init(rawValue: "org:\(organization)")
-    }
-}
+extension RepositoryQualifier: UserQualifiable {}
+extension RepositoryQualifier: OrganizationQualifiable {}
 
 // MARK: Support repository size qualifiers
-public extension RepositoryQualifier {
-    static func size(equals size: ByteSize) -> RepositoryQualifier {
-        return .init(rawValue: "size:\(size.kb)")
-    }
-    static func size(greaterThan size: ByteSize) -> RepositoryQualifier {
-        return .init(rawValue: "size:>\(size.kb)")
-    }
-    static func size(greaterThanOrEqualTo size: ByteSize) -> RepositoryQualifier {
-        return .init(rawValue: "size:>=\(size.kb)")
-    }
-    static func size(lessThan size: ByteSize) -> RepositoryQualifier {
-        return .init(rawValue: "size:<\(size.kb)")
-    }
-    static func size(lessThanOrEqualTo size: ByteSize) -> RepositoryQualifier {
-        return .init(rawValue: "size:<=\(size.kb)")
-    }
-    static func size(between lowerBound: ByteSize, and upperBound: ByteSize) -> RepositoryQualifier {
-        return .init(rawValue: "size:\(lowerBound.kb)..\(upperBound.kb)")
-    }
-    static func size(in range: ClosedRange<ByteSize>) -> RepositoryQualifier {
-        return .size(between: range.lowerBound, and: range.upperBound)
-    }
-    static func size(in range: PartialRangeThrough<ByteSize>) -> RepositoryQualifier {
-        return .size(lessThanOrEqualTo: range.upperBound)
-    }
-    static func size(in range: PartialRangeFrom<ByteSize>) -> RepositoryQualifier {
-        return .size(greaterThanOrEqualTo: range.lowerBound)
-    }
-}
+extension RepositoryQualifier: ByteSizeQualifiable {}
 
 // MARK: Support forks qualifiers
 public extension RepositoryQualifier {
@@ -125,35 +88,7 @@ public extension RepositoryQualifier {
 }
 
 // MARK: Support created qualifiers
-public extension RepositoryQualifier {
-    static func created(on date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "created:\(iso8601Formatter.string(from: date))")
-    }
-    static func created(after date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "created:>\(iso8601Formatter.string(from: date))")
-    }
-    static func created(afterOrOn date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "created:>=\(iso8601Formatter.string(from: date))")
-    }
-    static func created(before date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "created:<\(iso8601Formatter.string(from: date))")
-    }
-    static func created(beforeOrOn date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "created:<=\(iso8601Formatter.string(from: date))")
-    }
-    static func created(between lowerBound: Date, and upperBound: Date) -> RepositoryQualifier {
-        return .init(rawValue: "created:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
-    }
-    static func created(in range: ClosedRange<Date>) -> RepositoryQualifier {
-        return .created(between: range.lowerBound, and: range.upperBound)
-    }
-    static func created(in range: PartialRangeThrough<Date>) -> RepositoryQualifier {
-        return .created(beforeOrOn: range.upperBound)
-    }
-    static func created(in range: PartialRangeFrom<Date>) -> RepositoryQualifier {
-        return .created(afterOrOn: range.lowerBound)
-    }
-}
+extension RepositoryQualifier: CreatedQualifiable {}
 
 // MARK: Support pushed qualifiers
 public extension RepositoryQualifier {
@@ -214,11 +149,7 @@ public extension RepositoryQualifier {
 }
 
 // MARK: Support language qualifiers
-public extension RepositoryQualifier {
-    static func language(_ lang: String) -> RepositoryQualifier {
-        return .init(rawValue: "language:\(lang)")
-    }
-}
+extension RepositoryQualifier: LanguageQualifiable {}
 
 // MARK: Support topic qualifiers
 public extension RepositoryQualifier {
@@ -322,14 +253,7 @@ public extension RepositoryQualifier {
 }
 
 // MARK: Support qualifier for public or private repos
-public extension RepositoryQualifier {
-    static var isPublic: RepositoryQualifier {
-        return .init(rawValue: "is:public")
-    }
-    static var isPrivate: RepositoryQualifier {
-        return .init(rawValue: "is:private")
-    }
-}
+extension RepositoryQualifier: PublicPrivateQualifiable {}
 
 // MARK: Support qualifier for mirrors
 public extension RepositoryQualifier {
@@ -339,11 +263,7 @@ public extension RepositoryQualifier {
 }
 
 // MARK: Support qualifier for archived repos
-public extension RepositoryQualifier {
-    static func archived(_ archived: Bool) -> RepositoryQualifier {
-        return .init(rawValue: "archived:\(archived)")
-    }
-}
+extension RepositoryQualifier: ArchivedQualifiable {}
 
 // MARK: Support qualifiers for minimum number of issues with helpful labels
 public extension RepositoryQualifier {
@@ -352,16 +272,5 @@ public extension RepositoryQualifier {
     }
     static func helpWantedIssues(greaterThan count: Int) -> RepositoryQualifier {
         return .init(rawValue: "help-wanted-issues:>\(count)")
-    }
-}
-
-// MARK: Support excluding qualifiers
-public extension RepositoryQualifier {
-    static func exclude(_ qualifier: RepositoryQualifier) -> RepositoryQualifier {
-        var raw: String = ""
-        for qual in qualifier._qualifiers {
-            raw += "-\(qual)"
-        }
-        return .init(rawValue: raw)
     }
 }

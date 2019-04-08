@@ -22,32 +22,18 @@ public extension IssueQualifier {
 }
 
 // MARK: Support 'in:qualifier'
-public extension IssueQualifier {
-    enum InQualifier: String {
+extension IssueQualifier: InQualifiable {
+    public enum InQualifier: String {
         case title
         case body
         case comments
     }
-    static func `in`(_ qualifier: InQualifier) -> IssueQualifier {
-        return .init(rawValue: "in:\(qualifier.rawValue)")
-    }
 }
 
 // MARK: Support qualifiers for user, organization, and repository
-public extension IssueQualifier {
-    static func user(_ username: String) -> IssueQualifier {
-        return .init(rawValue: "user:\(username)")
-    }
-    static func organization(_ org: String) -> IssueQualifier {
-        return .init(rawValue: "organization:\(org)")
-    }
-    static func repository(_ repoName: String, user username: String) -> IssueQualifier {
-        return .init(rawValue: "repo:\(username)/\(repoName)")
-    }
-    static func repo(_ repoName: String, user username: String) -> IssueQualifier {
-        return .repository(repoName, user: username)
-    }
-}
+extension IssueQualifier: UserQualifiable {}
+extension IssueQualifier: OrganizationQualifiable {}
+extension IssueQualifier: RepositoryQualifiable {}
 
 // MARK: Support qualifying by issue state
 public extension IssueQualifier {
@@ -64,14 +50,7 @@ public extension IssueQualifier {
 }
 
 // MARK: Support qualifier for public or private issues
-public extension IssueQualifier {
-    static var isPublic: IssueQualifier {
-        return .init(rawValue: "is:public")
-    }
-    static var isPrivate: IssueQualifier {
-        return .init(rawValue: "is:private")
-    }
-}
+extension IssueQualifier: PublicPrivateQualifiable {}
 
 // MARK: Support qualifier for issue author
 public extension IssueQualifier {
@@ -174,11 +153,7 @@ public extension IssueQualifier {
 }
 
 // MARK: Support qualifying based on programming language
-public extension IssueQualifier {
-    static func language(_ lang: String) -> IssueQualifier {
-        return .init(rawValue: "language:\(lang)")
-    }
-}
+extension IssueQualifier: LanguageQualifiable {}
 
 // MARK: Support comments qualifiers
 public extension IssueQualifier {
@@ -241,35 +216,8 @@ public extension IssueQualifier {
 }
 
 // MARK: Support created, updated, closed, and merged qualifiers
+extension IssueQualifier: CreatedQualifiable {}
 public extension IssueQualifier {
-    static func created(on date: Date) -> IssueQualifier {
-        return .init(rawValue: "created:\(iso8601Formatter.string(from: date))")
-    }
-    static func created(after date: Date) -> IssueQualifier {
-        return .init(rawValue: "created:>\(iso8601Formatter.string(from: date))")
-    }
-    static func created(afterOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "created:>=\(iso8601Formatter.string(from: date))")
-    }
-    static func created(before date: Date) -> IssueQualifier {
-        return .init(rawValue: "created:<\(iso8601Formatter.string(from: date))")
-    }
-    static func created(beforeOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "created:<=\(iso8601Formatter.string(from: date))")
-    }
-    static func created(between lowerBound: Date, and upperBound: Date) -> IssueQualifier {
-        return .init(rawValue: "created:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
-    }
-    static func created(in range: ClosedRange<Date>) -> IssueQualifier {
-        return .created(between: range.lowerBound, and: range.upperBound)
-    }
-    static func created(in range: PartialRangeThrough<Date>) -> IssueQualifier {
-        return .created(beforeOrOn: range.upperBound)
-    }
-    static func created(in range: PartialRangeFrom<Date>) -> IssueQualifier {
-        return .created(afterOrOn: range.lowerBound)
-    }
-
     static func updated(on date: Date) -> IssueQualifier {
         return .init(rawValue: "updated:\(iso8601Formatter.string(from: date))")
     }
@@ -367,11 +315,7 @@ public extension IssueQualifier {
 }
 
 // MARK: Support qualifying based on whether a repo is archived
-public extension IssueQualifier {
-    static func archived(_ archived: Bool) -> IssueQualifier {
-        return .init(rawValue: "archived:\(archived)")
-    }
-}
+extension IssueQualifier: ArchivedQualifiable {}
 
 // MARK: Support qualifying based on missing metadata
 public extension IssueQualifier {

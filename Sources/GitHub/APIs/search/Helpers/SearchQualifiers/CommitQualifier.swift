@@ -125,11 +125,4 @@ public extension CommitQualifier {
 }
 
 // MARK: Support qualifier for public or private repos
-public extension CommitQualifier {
-    static var isPublic: CommitQualifier {
-        return .init(rawValue: "is:public")
-    }
-    static var isPrivate: CommitQualifier {
-        return .init(rawValue: "is:private")
-    }
-}
+extension CommitQualifier: PublicPrivateQualifiable {}
