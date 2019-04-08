@@ -13,7 +13,14 @@ public final class SearchCommits: GitHubAPI {
     }
 
     public struct Response: GitHubResponse {
-        public init(response: Future<HTTPResponse>) throws {
+        public let total: Int
+        public let incompleteResults: Bool
+        public let items: [Commit]
+
+        private enum CodingKeys: String, CodingKey {
+            case total = "total_count"
+            case incompleteResults = "incomplete_results"
+            case items
         }
     }
 
@@ -53,4 +60,59 @@ public final class SearchCommits: GitHubAPI {
 
         return try call(options: options, page: page, perPage: perPage)
     }
+}
+
+public struct Commit: Decodable {
+    public let url: URL
+    public let sha: String
+    public let htmlURL: URL
+    public let comments: URL
+    public let commit: CommitInfo
+    public let author: User
+    public let committer: User
+    public let parents: [Commit]
+    public let repository: Repository
+    public let score: Double
+
+    enum CodingKeys: String, CodingKey {
+        case url
+        case sha
+        case htmlURL = "html_url"
+        case comments = "comments_url"
+        case commit
+        case author
+        case committer
+        case parents
+        case repository
+        case score
+    }
+}
+
+public struct CommitInfo: Decodable {
+    public let url: URL
+    public let author: CommitUserInfo
+    public let committer: CommitUserInfo
+    public let message: String
+    public let tree: CommitTree
+    public let comments: Int
+
+    enum CodingKeys: String, CodingKey {
+        case url
+        case author
+        case committer
+        case message
+        case tree
+        case comments = "comment_count"
+    }
+}
+
+public struct CommitUserInfo: Decodable {
+    public let date: Date
+    public let name: String
+    public let email: String
+}
+
+public struct CommitTree: Decodable {
+    public let url: URL
+    public let sha: String
 }

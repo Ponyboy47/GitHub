@@ -15,12 +15,12 @@ public final class SearchRepositories: GitHubAPI {
     }
 
     public struct Response: GitHubResponse {
-        public let totalCount: Int
+        public let total: Int
         public let incompleteResults: Bool
         public let items: [Repository]
 
         private enum CodingKeys: String, CodingKey {
-            case totalCount = "total_count"
+            case total = "total_count"
             case incompleteResults = "incomplete_results"
             case items
         }
@@ -69,7 +69,7 @@ public struct Repository: Decodable {
     public let nodeID: String
     public let name: String
     public let fullName: String
-    public let owner: RepositoryOwner
+    public let owner: User
     public let `private`: Bool
     public let htmlURL: URL
     public let description: String
@@ -116,8 +116,8 @@ public struct Repository: Decodable {
     }
 }
 
-public struct RepositoryOwner: Decodable {
-    public enum OwnerType: String, Decodable {
+public struct User: Decodable {
+    public enum UserType: String, Decodable {
         case user = "User"
     }
 
@@ -128,7 +128,7 @@ public struct RepositoryOwner: Decodable {
     public let gravatarID: String
     public let url: URL
     public let receivedEvents: URL
-    public let type: OwnerType
+    public let type: UserType
 
     enum CodingKeys: String, CodingKey {
         case login
