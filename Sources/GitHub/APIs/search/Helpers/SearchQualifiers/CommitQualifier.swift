@@ -109,20 +109,9 @@ public extension CommitQualifier {
 }
 
 // MARK: Support qualifiers for user, organization, and repository
-public extension CommitQualifier {
-    static func user(_ username: String) -> CommitQualifier {
-        return .init(rawValue: "user:\(username)")
-    }
-    static func organization(_ org: String) -> CommitQualifier {
-        return .init(rawValue: "organization:\(org)")
-    }
-    static func repository(_ repoName: String, user username: String) -> CommitQualifier {
-        return .init(rawValue: "repo:\(username)/\(repoName)")
-    }
-    static func repo(_ repoName: String, user username: String) -> CommitQualifier {
-        return .repository(repoName, user: username)
-    }
-}
+extension CommitQualifier: UserQualifiable {}
+extension CommitQualifier: OrganizationQualifiable {}
+extension CommitQualifier: RepositoryQualifiable {}
 
 // MARK: Support qualifier for public or private repos
 extension CommitQualifier: PublicPrivateQualifiable {}
