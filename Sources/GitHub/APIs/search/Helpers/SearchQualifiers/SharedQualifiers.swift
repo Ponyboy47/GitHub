@@ -25,8 +25,14 @@ public extension OrganizationQualifiable {
 
 public protocol RepositoryQualifiable: SearchQualifier {}
 public extension RepositoryQualifiable {
+    static func repository(_ repo: String) -> Self {
+        return .init(rawValue: "repo:\(repo)")
+    }
     static func repository(_ repoName: String, user username: String) -> Self {
-        return .init(rawValue: "repo:\(username)/\(repoName)")
+        return .repository("\(username)/\(repoName)")
+    }
+    static func repo(_ repo: String) -> Self {
+        return .repository(repo)
     }
     static func repo(_ repoName: String, user username: String) -> Self {
         return .repository(repoName, user: username)
