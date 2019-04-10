@@ -1,58 +1,47 @@
 import HTTP
 
 public struct GitHubAuth {
-    let basic: BasicAuthentication?
+    let basic: BasicAuthorization?
     let token: TokenAuthorization?
-    let secret: OAuthKeySecretAuthentication?
+    // let secret: OAuthKeySecretAuthentication?
 
-    public init(basic: BasicAuthentication) {
+    public init(basic: BasicAuthorization) {
         self.basic = basic
         token = nil
-        secret = nil
+        // secret = nil
     }
 
     public init(username: String, password: String) {
-        basic = .init(username: username, password: password)
-        token = nil
-        secret = nil
+        self.init(basic: .init(username: username, password: password))
     }
 
     public init(token: TokenAuthorization) {
         self.token = token
         basic = nil
-        secret = nil
+        // secret = nil
     }
 
     public init(token: String) {
-        self.token = TokenAuthorization(token: token)
-        basic = nil
-        secret = nil
+        self.init(token: TokenAuthorization(token: token))
     }
 
-    public init(secret: OAuthKeySecretAuthentication) {
-        self.secret = secret
-        basic = nil
-        token = nil
-    }
+    // public init(secret: OAuthKeySecretAuthentication) {
+    //     self.secret = secret
+    //     basic = nil
+    //     token = nil
+    // }
 
-    public init(key: String, secret: String) {
-        self.secret = .init(key: key, secret: secret)
-        basic = nil
-        token = nil
-    }
+    // public init(key: String, secret: String) {
+    //     self.init(secret: .init(key: key, secret: secret))
+    // }
 
-    public init(clientID id: String, secret: String) {
-        self.init(key: id, secret: secret)
-    }
-}
-
-public struct BasicAuthentication {
-    let username: String
-    let password: String
+    // public init(clientID id: String, secret: String) {
+    //     self.init(key: id, secret: secret)
+    // }
 }
 
 public extension GitHub {
-    convenience init(basic: BasicAuthentication) {
+    convenience init(basic: BasicAuthorization) {
         self.init(auth: .init(basic: basic))
     }
 
@@ -93,21 +82,21 @@ extension HTTPHeaders {
     }
 }
 
-public struct OAuthKeySecretAuthentication {
-    let key: String
-    let secret: String
-}
-
-public extension GitHub {
-    convenience init(secret: OAuthKeySecretAuthentication) {
-        self.init(auth: .init(secret: secret))
-    }
-
-    convenience init(key: String, secret: String) {
-        self.init(auth: .init(key: key, secret: secret))
-    }
-
-    convenience init(clientID id: String, secret: String) {
-        self.init(auth: .init(clientID: id, secret: secret))
-    }
-}
+// public struct OAuthKeySecretAuthentication {
+//     let key: String
+//     let secret: String
+// }
+// 
+// public extension GitHub {
+//     convenience init(secret: OAuthKeySecretAuthentication) {
+//         self.init(auth: .init(secret: secret))
+//     }
+// 
+//     convenience init(key: String, secret: String) {
+//         self.init(auth: .init(key: key, secret: secret))
+//     }
+// 
+//     convenience init(clientID id: String, secret: String) {
+//         self.init(auth: .init(clientID: id, secret: secret))
+//     }
+// }
