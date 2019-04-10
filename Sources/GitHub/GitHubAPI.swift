@@ -33,10 +33,7 @@ public struct URLQuery: GitHubRequestData {
             query += "&"
         }
 
-        guard let percentEncoded = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            fatalError("Failed to percent encode '\(value)'.")
-        }
-        query += "\(key)=\(percentEncoded.replacingOccurrences(of: "+", with: "%2B"))"
+        query += "\(key)=\(value)"
     }
 
     public mutating func add(flag: String, if bool: Bool) {
@@ -79,6 +76,7 @@ public protocol GitHubAPI {
     associatedtype Element: GitHubResponseElement
     associatedtype Response: GitHubResponseRepresentable = GitHubResponse<Element>
 
+    static var customAcceptHeader: String? { get }
     static var name: String { get }
     static var endpoint: String { get }
     static var requiresAuth: Bool { get }
@@ -92,6 +90,7 @@ public protocol GitHubAPI {
 }
 
 public extension GitHubAPI {
+    static var customAcceptHeader: String? { return nil }
     static var name: String { return "\(Self.self)" }
 
     static func buildURLPath() -> String {
@@ -123,7 +122,7 @@ public extension GitHubAPI {
         let request = generateRequest(options: options,
                                       page: page == 1 ? nil : page,
                                       perPage: perPage == githubPerPage ? nil : perPage)
-        return connector.send(request: request)
+        return connector.send(request: request, withAuth: Self.requiresAuth)
     }
 
     func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) throws -> Response {
@@ -137,13 +136,21 @@ public extension GitHubAPI {
 
 extension GitHubAPI where Options == HTTPBody {
     public func generateRequest(options: Options, page: Int?, perPage: Int?) -> HTTPRequest {
-        return .init(method: Self.method, url: Self.buildURLPath(page: page, perPage: perPage), headers: defaultAPIHeaders, body: options)
+        var headers = defaultAPIHeaders
+        if let accept = Self.customAcceptHeader {
+            headers.replaceOrAdd(name: .accept, value: accept)
+        }
+        return .init(method: Self.method, url: Self.buildURLPath(page: page, perPage: perPage), headers: headers, body: options)
     }
 }
 
 extension GitHubAPI where Options == URLQuery {
     public func generateRequest(options: Options, page: Int?, perPage: Int?) -> HTTPRequest {
-        return .init(method: Self.method, url: options.url(base: Self.buildURLPath(), page: page, perPage: perPage), headers: defaultAPIHeaders)
+        var headers = defaultAPIHeaders
+        if let accept = Self.customAcceptHeader {
+            headers.replaceOrAdd(name: .accept, value: accept)
+        }
+        return .init(method: Self.method, url: options.url(base: Self.buildURLPath(), page: page, perPage: perPage), headers: headers)
     }
 }
 
@@ -187,9 +194,18 @@ public final class GitHubConnector {
         return HTTPClient.connect(scheme: .https, hostname: "api.github.com", on: worker)
     }
 
-    fileprivate func send(request: HTTPRequest) -> Future<HTTPResponse> {
+    fileprivate func send(request: HTTPRequest, withAuth: Bool) -> Future<HTTPResponse> {
+        var req = request
+        if withAuth, let auth = auth {
+            if let basic = auth.basic {
+                req.headers.basicAuthorization = basic
+            } else if let token = auth.token {
+                req.headers.tokenAuthorization = token
+            }
+        }
+
         return connect().flatMap(to: HTTPResponse.self) { client in
-            return client.send(request)
+            return client.send(req)
         }
     }
 }
