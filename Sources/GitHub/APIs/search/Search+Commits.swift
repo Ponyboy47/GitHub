@@ -6,13 +6,14 @@ public final class SearchCommits: GitHubAPI {
     public typealias Element = Commit
 
     public enum SortOptions: String {
-        case authorGitHubDate = "author-date"
-        case committerGitHubDate = "committer-date"
+        case authorDate = "author-date"
+        case committerDate = "committer-date"
         case bestMatch = "best-match"
 
         public static let `default`: SortOptions = .bestMatch
     }
 
+    public static let customAcceptHeader: String? = "application/vnd.github.cloak-preview"
     public static let endpoint = "commits"
     public static let requiresAuth = false
     public static let method: HTTPMethod = .GET

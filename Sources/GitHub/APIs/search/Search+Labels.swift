@@ -23,6 +23,15 @@ public final class SearchLabels: GitHubAPI {
         self.connector = connector
     }
 
+    public func query(_ keywords: SearchKeyword,
+                      repositoryID id: Int,
+                      sort: SortOptions = .default,
+                      order: SortOrdering = .default,
+                      page: Int = 1,
+                      perPage: Int = githubPerPage) throws -> Response {
+        return try query(keywords.rawValue, repositoryID: id, sort: sort, order: order, page: page, perPage: perPage)
+    }
+
     public func query(_ string: String,
                       repositoryID id: Int,
                       sort: SortOptions = .default,

@@ -7,6 +7,7 @@ public final class SearchTopics: GitHubAPI {
 
     public typealias SortOptions = Void
 
+    public static let customAcceptHeader: String? = "application/vnd.github.mercy-preview+json"
     public static let endpoint = "code"
     public static let requiresAuth = true
     public static let method: HTTPMethod = .GET
@@ -18,7 +19,7 @@ public final class SearchTopics: GitHubAPI {
     }
 
     public func query(keywords: SearchKeyword = [],
-                      qualifiers: RepositoryQualifier,
+                      qualifiers: TopicQualifier,
                       page: Int = 1,
                       perPage: Int = githubPerPage) throws -> Response {
         let query = SearchQuery(keywords: keywords, qualifiers: qualifiers).rawValue
