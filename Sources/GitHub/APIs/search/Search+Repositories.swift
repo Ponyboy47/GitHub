@@ -63,7 +63,8 @@ public final class SearchRepositories: GitHubAPI {
     }
 }
 
-public struct Repository: GitHubResponseElement {
+private var repositoryURLsCache = [Repository: RepositoryURLs]()
+public struct Repository: GitHubResponseElement, Hashable {
     public let id: Int
     public let nodeID: String
     public let name: String
@@ -72,93 +73,32 @@ public struct Repository: GitHubResponseElement {
     public let owner: User
     public let description: String
     public let fork: Bool
-    public let url: URL
-    public lazy var urls: RepositoryURLs = {
-        return RepositoryURLs(html: _html,
-                              forks: _forks,
-                              keys: _keys,
-                              collaborators: _collaborators,
-                              teams: _teams,
-                              hooks: _hooks,
-                              issueEvents: _issueEvents,
-                              events: _events,
-                              assignees: _assignees,
-                              branches: _branches,
-                              tags: _tags,
-                              blobs: _blobs,
-                              gitTags: _gitTags,
-                              gitRefs: _gitRefs,
-                              trees: _trees,
-                              statuses: _statuses,
-                              languages: _languages,
-                              stargazers: _stargazers,
-                              contributors: _contributors,
-                              subscribers: _subscribers,
-                              subscription: _subscription,
-                              commits: _commits,
-                              gitCommits: _gitCommits,
-                              comments: _comments,
-                              issueComment: _issueComment,
-                              contents: _contents,
-                              compare: _compare,
-                              merges: _merges,
-                              archive: _archive,
-                              downloads: _downloads,
-                              issues: _issues,
-                              pulls: _pulls,
-                              milestones: _milestones,
-                              notifications: _notifications,
-                              labels: _labels,
-                              releases: _releases,
-                              deployments: _deployments,
-                              git: _git,
-                              ssh: _ssh,
-                              clone: _clone,
-                              svn: _svn,
-                              homepage: _homepage,
-                              mirror: _mirror)
-    }()
-    public let _html: URL
-    public let _forks: URL
-    public let _keys: String
-    public let _collaborators: String
-    public let _teams: URL
-    public let _hooks: URL
-    public let _issueEvents: String
-    public let _events: URL
-    public let _assignees: String
-    public let _branches: String
-    public let _tags: URL
-    public let _blobs: String
-    public let _gitTags: String
-    public let _gitRefs: String
-    public let _trees: String
-    public let _statuses: String
-    public let _languages: URL
-    public let _stargazers: URL
-    public let _contributors: URL
-    public let _subscribers: URL
-    public let _subscription: URL
-    public let _commits: String
-    public let _gitCommits: String
-    public let _comments: String
-    public let _issueComment: String
-    public let _contents: String
-    public let _compare: String
-    public let _merges: URL
-    public let _archive: String
-    public let _downloads: URL
-    public let _issues: String
-    public let _pulls: String
-    public let _milestones: String
-    public let _notifications: String
-    public let _labels: String
-    public let _releases: String
-    public let _deployments: URL
-    public let _git: URL
-    public let _ssh: URL
-    public let _clone: URL
-    public let _svn: URL
+    public var urls: RepositoryURLs {
+        if let urls = repositoryURLsCache[self] {
+            return urls
+        }
+
+        let urls = RepositoryURLs(repository: _api, html: _html, forks: _forks, keys: _keys,
+                                  collaborators: _collaborators, teams: _teams, hooks: _hooks,
+                                  issueEvents: _issueEvents, events: _events, assignees: _assignees,
+                                  branches: _branches, tags: _tags, blobs: _blobs, gitTags: _gitTags, gitRefs: _gitRefs,
+                                  trees: _trees, statuses: _statuses, languages: _languages, stargazers: _stargazers,
+                                  contributors: _contributors, subscribers: _subscribers, subscription: _subscription,
+                                  commits: _commits, gitCommits: _gitCommits, comments: _comments,
+                                  issueComment: _issueComment, contents: _contents, compare: _compare, merges: _merges,
+                                  archive: _archive, downloads: _downloads, issues: _issues, pulls: _pulls,
+                                  milestones: _milestones, notifications: _notifications, labels: _labels,
+                                  releases: _releases, deployments: _deployments, git: _git, ssh: _ssh, clone: _clone,
+                                  svn: _svn, homepage: _homepage, mirror: _mirror)
+        repositoryURLsCache[self] = urls
+
+        return urls
+    }
+    public let _api, _html, _forks, _teams, _hooks, _events, _tags, _languages, _stargazers, _contributors,
+               _subscribers, _subscription, _merges, _downloads, _deployments, _git, _ssh, _clone, _svn: URL
+    public let _keys, _collaborators, _issueEvents, _assignees, _branches, _blobs, _gitTags, _gitRefs, _trees,
+               _statuses, _commits, _gitCommits, _comments, _issueComment, _contents, _compare, _archive, _issues,
+               _pulls, _milestones, _notifications, _labels, _releases: String
     public let _homepage: String?
     public let _mirror: URL?
     public let created: GitHubDate
@@ -182,127 +122,116 @@ public struct Repository: GitHubResponseElement {
     public let score: Double?
 
     enum CodingKeys: String, CodingKey {
-        case id
-        case nodeID = "node_id"
-        case name
-        case fullName = "full_name"
-        case owner
-        case `private`
-        case description
-        case fork
-        case url
-        case _html = "html_url"
-        case _forks = "forks_url"
-        case _keys = "keys_url"
-        case _collaborators = "collaborators_url"
-        case _teams = "teams_url"
-        case _hooks = "hooks_url"
-        case _issueEvents = "issue_events_url"
-        case _events = "events_url"
-        case _assignees = "assignees_url"
-        case _branches = "branches_url"
-        case _tags = "tags_url"
-        case _blobs = "blobs_url"
-        case _gitTags = "git_tags_url"
-        case _gitRefs = "git_refs_url"
-        case _trees = "trees_url"
-        case _statuses = "statuses_url"
-        case _languages = "languages_url"
-        case _stargazers = "stargazers_url"
-        case _contributors = "contributors_url"
-        case _subscribers = "subscribers_url"
-        case _subscription = "subscription_url"
-        case _commits = "commits_url"
-        case _gitCommits = "git_commits_url"
-        case _comments = "comments_url"
-        case _issueComment = "issue_comment_url"
-        case _contents = "contents_url"
-        case _compare = "compare_url"
-        case _merges = "merges_url"
-        case _archive = "archive_url"
-        case _downloads = "downloads_url"
-        case _issues = "issues_url"
-        case _pulls = "pulls_url"
-        case _milestones = "milestones_url"
-        case _notifications = "notifications_url"
-        case _labels = "labels_url"
-        case _releases = "releases_url"
-        case _deployments = "deployments_url"
-        case _git = "git_url"
-        case _ssh = "ssh_url"
-        case _clone = "clone_url"
-        case _svn = "svn_url"
-        case _homepage = "homepage"
-        case _mirror = "mirror_url"
-        case created = "created_at"
-        case updated = "updated_at"
-        case pushed = "pushed_at"
-        case size
-        case stargazers = "stargazers_count"
-        case watchers
-        case language
-        case hasIssues = "has_issues"
-        case hasProjects = "has_projects"
-        case hasDownloads = "has_downloads"
-        case hasWiki = "has_wiki"
-        case hasPages = "has_pages"
-        case forks
-        case archived
-        case disabled
-        case openIssues = "open_issues"
-        case license
-        case defaultBranch = "default_branch"
-        case score
+        case id, nodeID = "node_id", name, fullName = "full_name", owner, `private`, description, fork, _api = "url",
+        _html = "html_url", _forks = "forks_url", _keys = "keys_url", _collaborators = "collaborators_url",
+        _teams = "teams_url", _hooks = "hooks_url", _issueEvents = "issue_events_url", _events = "events_url",
+        _assignees = "assignees_url", _branches = "branches_url", _tags = "tags_url", _blobs = "blobs_url",
+        _gitTags = "git_tags_url", _gitRefs = "git_refs_url", _trees = "trees_url", _statuses = "statuses_url",
+        _languages = "languages_url", _stargazers = "stargazers_url", _contributors = "contributors_url",
+        _subscribers = "subscribers_url", _subscription = "subscription_url", _commits = "commits_url",
+        _gitCommits = "git_commits_url", _comments = "comments_url", _issueComment = "issue_comment_url",
+        _contents = "contents_url", _compare = "compare_url", _merges = "merges_url", _archive = "archive_url",
+        _downloads = "downloads_url", _issues = "issues_url", _pulls = "pulls_url", _milestones = "milestones_url",
+        _notifications = "notifications_url", _labels = "labels_url", _releases = "releases_url",
+        _deployments = "deployments_url", _git = "git_url", _ssh = "ssh_url", _clone = "clone_url", _svn = "svn_url",
+        _homepage = "homepage", _mirror = "mirror_url", created = "created_at", updated = "updated_at",
+        pushed = "pushed_at", size, stargazers = "stargazers_count", watchers, language, hasIssues = "has_issues",
+        hasProjects = "has_projects", hasDownloads = "has_downloads", hasWiki = "has_wiki", hasPages = "has_pages",
+        forks, archived, disabled, openIssues = "open_issues", license, defaultBranch = "default_branch", score
     }
 }
 
-public struct RepositoryURLs {
-    public let html: URL
-    public let forks: URL
-    public let keys: String
-    public let collaborators: String
-    public let teams: URL
-    public let hooks: URL
-    public let issueEvents: String
-    public let events: URL
-    public let assignees: String
-    public let branches: String
-    public let tags: URL
-    public let blobs: String
-    public let gitTags: String
-    public let gitRefs: String
-    public let trees: String
-    public let statuses: String
-    public let languages: URL
-    public let stargazers: URL
-    public let contributors: URL
-    public let subscribers: URL
-    public let subscription: URL
-    public let commits: String
-    public let gitCommits: String
-    public let comments: String
-    public let issueComment: String
-    public let contents: String
-    public let compare: String
-    public let merges: URL
-    public let archive: String
-    public let downloads: URL
-    public let issues: String
-    public let pulls: String
-    public let milestones: String
-    public let notifications: String
-    public let labels: String
-    public let releases: String
-    public let deployments: URL
-    public let git: URL
-    public let ssh: URL
-    public let clone: URL
-    public let svn: URL
-    public let homepage: String?
-    public let mirror: URL?
+public struct RepositoryURLs: GitHubURLContainer, Hashable {
+    public let apis: APIURLs
+    public let webpage: URL
+    public let others: OtherURLs
+
+    public init(repository: URL, html: URL, forks: URL, keys: String, collaborators: String, teams: URL, hooks: URL,
+                issueEvents: String, events: URL, assignees: String, branches: String, tags: URL, blobs: String,
+                gitTags: String, gitRefs: String, trees: String, statuses: String, languages: URL, stargazers: URL,
+                contributors: URL, subscribers: URL, subscription: URL, commits: String, gitCommits: String,
+                comments: String, issueComment: String, contents: String, compare: String, merges: URL,
+                archive: String, downloads: URL, issues: String, pulls: String, milestones: String,
+                notifications: String, labels: String, releases: String, deployments: URL, git: URL, ssh: URL,
+                clone: URL, svn: URL, homepage: String?, mirror: URL?) {
+        apis = .init(repository: repository, forks: forks, keys: keys, collaborators: collaborators, teams: teams,
+                     hooks: hooks, issueEvents: issueEvents, events: events, assignees: assignees, branches: branches,
+                     tags: tags, blobs: blobs, gitTags: gitTags, gitRefs: gitRefs, trees: trees, statuses: statuses,
+                     languages: languages, stargazers: stargazers, contributors: contributors,
+                     subscribers: subscribers, subscription: subscription, commits: commits, gitCommits: gitCommits,
+                     comments: comments, issueComment: issueComment, contents: contents, compare: compare,
+                     merges: merges, archive: archive, downloads: downloads, issues: issues, pulls: pulls,
+                     milestones: milestones, notifications: notifications, labels: labels, releases: releases,
+                     deployments: deployments)
+        webpage = html
+        others = .init(git: git, ssh: ssh, clone: clone, svn: svn, homepage: homepage, mirror: mirror)
+    }
+
+    public struct APIURLs: Hashable {
+        public let repository, forks, teams, hooks, events, tags, languages, stargazers, contributors, subscribers,
+                   subscription, merges, downloads, deployments: URL
+        public let _keys, _collaborators, _issueEvents, _assignees, _branches, _blobs, _gitTags, _gitRefs, _trees,
+                   _statuses, _commits, _gitCommits, _comments, _issueComment, _contents, _compare, _archive, _issues,
+                   _pulls, _milestones, _notifications, _labels, _releases: String
+
+        public init(repository: URL, forks: URL, keys: String, collaborators: String, teams: URL, hooks: URL,
+                    issueEvents: String, events: URL, assignees: String, branches: String, tags: URL, blobs: String,
+                    gitTags: String, gitRefs: String, trees: String, statuses: String, languages: URL, stargazers: URL,
+                    contributors: URL, subscribers: URL, subscription: URL, commits: String, gitCommits: String,
+                    comments: String, issueComment: String, contents: String, compare: String, merges: URL,
+                    archive: String, downloads: URL, issues: String, pulls: String, milestones: String,
+                    notifications: String, labels: String, releases: String, deployments: URL) {
+            self.repository = repository
+            self.forks = forks
+            _keys = keys
+            _collaborators = collaborators
+            self.teams = teams
+            self.hooks = hooks
+            _issueEvents = issueEvents
+            self.events = events
+            _assignees = assignees
+            _branches = branches
+            self.tags = tags
+            _blobs = blobs
+            _gitTags = gitTags
+            _gitRefs = gitRefs
+            _trees = trees
+            _statuses = statuses
+            self.languages = languages
+            self.stargazers = stargazers
+            self.contributors = contributors
+            self.subscribers = subscribers
+            self.subscription = subscription
+            _commits = commits
+            _gitCommits = gitCommits
+            _comments = comments
+            _issueComment = issueComment
+            _contents = contents
+            _compare = compare
+            self.merges = merges
+            _archive = archive
+            self.downloads = downloads
+            _issues = issues
+            _pulls = pulls
+            _milestones = milestones
+            _notifications = notifications
+            _labels = labels
+            _releases = releases
+            self.deployments = deployments
+        }
+    }
+
+    public struct OtherURLs: Hashable {
+        public let git: URL
+        public let ssh: URL
+        public let clone: URL
+        public let svn: URL
+        public let homepage: String?
+        public let mirror: URL?
+    }
 }
 
-public struct License: Decodable {
+public struct License: Decodable, Hashable {
     public let key: SupportedLicense
     public let name: String
     public let spdxID: String

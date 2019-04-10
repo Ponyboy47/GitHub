@@ -1,7 +1,3 @@
-import class Foundation.ISO8601DateFormatter
-
-let iso8601Formatter = ISO8601DateFormatter()
-
 public protocol SearchQualifier: ExpressibleByStringLiteral, OptionSet {
     var _qualifiers: Set<String> { get set }
 
@@ -114,7 +110,7 @@ public extension SearchQualifier {
     }
 }
 
-public struct ByteSize: RawRepresentable, ExpressibleByIntegerLiteral, Equatable, Comparable, Codable {
+public struct ByteSize: RawRepresentable, ExpressibleByIntegerLiteral, Equatable, Comparable, Codable, Hashable {
     public let rawValue: Int
 
     public var bytes: Int { return rawValue }

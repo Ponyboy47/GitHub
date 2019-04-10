@@ -62,7 +62,7 @@ public final class SearchUsers: GitHubAPI {
     }
 }
 
-public struct User: GitHubResponseElement {
+public struct User: GitHubResponseElement, Hashable {
     public enum UserType: String, Decodable {
         case user = "User"
         case organization = "Organization"
@@ -124,7 +124,7 @@ public struct User: GitHubResponseElement {
     }
 }
 
-public struct UserURLs {
+public struct UserURLs: Hashable {
     let avatar: URL
     let html: URL
     let followers: URL

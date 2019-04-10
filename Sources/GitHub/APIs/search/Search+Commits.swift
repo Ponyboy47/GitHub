@@ -62,23 +62,36 @@ public final class SearchCommits: GitHubAPI {
     }
 }
 
-public struct Commit: GitHubResponseElement {
-    public let url: URL
+private var commitURLsCache: [Commit: CommitURLs] = [:]
+public struct Commit: GitHubResponseElement, Hashable {
     public let sha: String
-    public let html: URL
-    public let comments: URL
+    public let nodeID: String
+    public var urls: CommitURLs {
+        if let urls = commitURLsCache[self] {
+            return urls
+        }
+        let urls = CommitURLs(api: _api,
+                              html: _html,
+                              comments: _comments)
+        commitURLsCache[self] = urls
+        return urls
+    }
+    public let _api: URL
+    public let _html: URL
+    public let _comments: URL
     public let commit: CommitInfo
     public let author: User
     public let committer: User
-    public let parents: [Commit]
+    public let parents: [BasicCommit]
     public let repository: Repository
     public let score: Double?
 
     enum CodingKeys: String, CodingKey {
-        case url
         case sha
-        case html = "html_url"
-        case comments = "comments_url"
+        case nodeID = "node_id"
+        case _api = "url"
+        case _html = "html_url"
+        case _comments = "comments_url"
         case commit
         case author
         case committer
@@ -88,7 +101,22 @@ public struct Commit: GitHubResponseElement {
     }
 }
 
-public struct CommitInfo: Decodable {
+public struct CommitURLs: GitHubURLContainer, Hashable {
+    public let apis: APIURLs
+    public let webpage: URL
+
+    init(api: URL, html: URL, comments: URL) {
+        apis = .init(commit: api, comments: comments)
+        webpage = html
+    }
+
+    public struct APIURLs: Hashable {
+        public let commit: URL
+        public let comments: URL
+    }
+}
+
+public struct CommitInfo: Decodable, Hashable {
     public let url: URL
     public let author: CommitUserInfo
     public let committer: CommitUserInfo
@@ -106,13 +134,25 @@ public struct CommitInfo: Decodable {
     }
 }
 
-public struct CommitUserInfo: Decodable {
+public struct CommitUserInfo: Decodable, Hashable {
     public let date: GitHubDate
     public let name: String
     public let email: String
 }
 
-public struct CommitTree: Decodable {
+public struct CommitTree: Decodable, Hashable {
     public let url: URL
     public let sha: String
+}
+
+public struct BasicCommit: Decodable, Hashable {
+    public let url: URL
+    public let html: URL
+    public let sha: String
+
+    enum CodingKeys: String, CodingKey {
+        case url
+        case html = "html_url"
+        case sha
+    }
 }

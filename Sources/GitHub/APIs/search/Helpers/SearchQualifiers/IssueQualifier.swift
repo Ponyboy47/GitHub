@@ -219,22 +219,22 @@ public extension IssueQualifier {
 extension IssueQualifier: CreatedQualifiable {}
 public extension IssueQualifier {
     static func updated(on date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "updated:\(ISO8601Formatter.string(from: date))")
     }
     static func updated(after date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:>\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "updated:>\(ISO8601Formatter.string(from: date))")
     }
     static func updated(afterOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:>=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "updated:>=\(ISO8601Formatter.string(from: date))")
     }
     static func updated(before date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:<\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "updated:<\(ISO8601Formatter.string(from: date))")
     }
     static func updated(beforeOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:<=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "updated:<=\(ISO8601Formatter.string(from: date))")
     }
     static func updated(between lowerBound: Date, and upperBound: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
+        return .init(rawValue: "updated:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
     }
     static func updated(in range: ClosedRange<Date>) -> IssueQualifier {
         return .updated(between: range.lowerBound, and: range.upperBound)
@@ -247,22 +247,22 @@ public extension IssueQualifier {
     }
 
     static func closed(on date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "closed:\(ISO8601Formatter.string(from: date))")
     }
     static func closed(after date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:>\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "closed:>\(ISO8601Formatter.string(from: date))")
     }
     static func closed(afterOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:>=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "closed:>=\(ISO8601Formatter.string(from: date))")
     }
     static func closed(before date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:<\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "closed:<\(ISO8601Formatter.string(from: date))")
     }
     static func closed(beforeOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:<=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "closed:<=\(ISO8601Formatter.string(from: date))")
     }
     static func closed(between lowerBound: Date, and upperBound: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
+        return .init(rawValue: "closed:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
     }
     static func closed(in range: ClosedRange<Date>) -> IssueQualifier {
         return .closed(between: range.lowerBound, and: range.upperBound)
@@ -275,22 +275,22 @@ public extension IssueQualifier {
     }
 
     static func merged(on date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "merged:\(ISO8601Formatter.string(from: date))")
     }
     static func merged(after date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:>\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "merged:>\(ISO8601Formatter.string(from: date))")
     }
     static func merged(afterOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:>=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "merged:>=\(ISO8601Formatter.string(from: date))")
     }
     static func merged(before date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:<\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "merged:<\(ISO8601Formatter.string(from: date))")
     }
     static func merged(beforeOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:<=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "merged:<=\(ISO8601Formatter.string(from: date))")
     }
     static func merged(between lowerBound: Date, and upperBound: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
+        return .init(rawValue: "merged:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
     }
     static func merged(in range: ClosedRange<Date>) -> IssueQualifier {
         return .merged(between: range.lowerBound, and: range.upperBound)

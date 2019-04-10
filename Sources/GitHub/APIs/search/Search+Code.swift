@@ -60,15 +60,23 @@ public final class SearchCode: GitHubAPI {
     }
 }
 
-public struct Code: GitHubResponseElement {
+private var codeURLsCache = [Code: CodeURLs]()
+public struct Code: GitHubResponseElement, Hashable {
     public let name: String
     public let path: String
     public let sha: String
-    public let url: URL
-    public lazy var urls: CodeURLs = {
-        return CodeURLs(git: _git,
-                        html: _html)
-    }()
+    public var urls: CodeURLs {
+        if let urls = codeURLsCache[self] {
+            return urls
+        }
+
+        let urls = CodeURLs(code: _api,
+                            git: _git,
+                            html: _html)
+        codeURLsCache[self] = urls
+        return urls
+    }
+    public let _api: URL
     public let _git: URL
     public let _html: URL
     public let repository: Repository
@@ -78,7 +86,7 @@ public struct Code: GitHubResponseElement {
         case name
         case path
         case sha
-        case url
+        case _api = "url"
         case _git = "git_url"
         case _html = "html_url"
         case repository
@@ -86,7 +94,17 @@ public struct Code: GitHubResponseElement {
     }
 }
 
-public struct CodeURLs {
-    public let git: URL
-    public let html: URL
+public struct CodeURLs: GitHubURLContainer, Hashable {
+    public let apis: APIURLs
+    public let webpage: URL
+
+    public init(code: URL, git: URL, html: URL) {
+        apis = .init(code: code, git: git)
+        webpage = html
+    }
+
+    public struct APIURLs: Hashable {
+        public let code: URL
+        public let git: URL
+    }
 }

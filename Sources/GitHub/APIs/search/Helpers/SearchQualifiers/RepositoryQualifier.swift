@@ -93,22 +93,22 @@ extension RepositoryQualifier: CreatedQualifiable {}
 // MARK: Support pushed qualifiers
 public extension RepositoryQualifier {
     static func pushed(on date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:\(ISO8601Formatter.string(from: date))")
     }
     static func pushed(after date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:>\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:>\(ISO8601Formatter.string(from: date))")
     }
     static func pushed(afterOrOn date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:>=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:>=\(ISO8601Formatter.string(from: date))")
     }
     static func pushed(before date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:<\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:<\(ISO8601Formatter.string(from: date))")
     }
     static func pushed(beforeOrOn date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:<=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:<=\(ISO8601Formatter.string(from: date))")
     }
     static func pushed(between lowerBound: Date, and upperBound: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
+        return .init(rawValue: "pushed:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
     }
     static func pushed(in range: ClosedRange<Date>) -> RepositoryQualifier {
         return .pushed(between: range.lowerBound, and: range.upperBound)
@@ -186,7 +186,7 @@ public extension RepositoryQualifier {
 }
 
 // MARK: Support 'license:qualifier'
-public enum SupportedLicense: String, Decodable {
+public enum SupportedLicense: String, Decodable, Hashable {
     case aflv3 = "afl-3.0"
     public static let academicFreeLicense_v3 = SupportedLicense.aflv3
     case apachev2 = "apache-2.0"

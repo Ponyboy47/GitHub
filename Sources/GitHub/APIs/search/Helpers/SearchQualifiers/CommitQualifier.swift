@@ -28,22 +28,22 @@ public extension CommitQualifier {
     }
 
     static func authored(on date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "author-date:\(ISO8601Formatter.string(from: date))")
     }
     static func authored(after date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:>\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "author-date:>\(ISO8601Formatter.string(from: date))")
     }
     static func authored(afterOrOn date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:>=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "author-date:>=\(ISO8601Formatter.string(from: date))")
     }
     static func authored(before date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:<\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "author-date:<\(ISO8601Formatter.string(from: date))")
     }
     static func authored(beforeOrOn date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:<=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "author-date:<=\(ISO8601Formatter.string(from: date))")
     }
     static func authored(between lowerBound: Date, and upperBound: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
+        return .init(rawValue: "author-date:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
     }
     static func authored(in range: ClosedRange<Date>) -> CommitQualifier {
         return .authored(between: range.lowerBound, and: range.upperBound)
@@ -56,22 +56,22 @@ public extension CommitQualifier {
     }
 
     static func committed(on date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "committer-date:\(ISO8601Formatter.string(from: date))")
     }
     static func committed(after date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:>\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "committer-date:>\(ISO8601Formatter.string(from: date))")
     }
     static func committed(afterOrOn date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:>=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "committer-date:>=\(ISO8601Formatter.string(from: date))")
     }
     static func committed(before date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:<\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "committer-date:<\(ISO8601Formatter.string(from: date))")
     }
     static func committed(beforeOrOn date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:<=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "committer-date:<=\(ISO8601Formatter.string(from: date))")
     }
     static func committed(between lowerBound: Date, and upperBound: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
+        return .init(rawValue: "committer-date:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
     }
     static func committed(in range: ClosedRange<Date>) -> CommitQualifier {
         return .committed(between: range.lowerBound, and: range.upperBound)

@@ -42,22 +42,22 @@ public extension RepositoryQualifiable {
 public protocol CreatedQualifiable: SearchQualifier {}
 public extension CreatedQualifiable {
     static func created(on date: Date) -> Self {
-        return .init(rawValue: "created:\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "created:\(ISO8601Formatter.string(from: date))")
     }
     static func created(after date: Date) -> Self {
-        return .init(rawValue: "created:>\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "created:>\(ISO8601Formatter.string(from: date))")
     }
     static func created(afterOrOn date: Date) -> Self {
-        return .init(rawValue: "created:>=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "created:>=\(ISO8601Formatter.string(from: date))")
     }
     static func created(before date: Date) -> Self {
-        return .init(rawValue: "created:<\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "created:<\(ISO8601Formatter.string(from: date))")
     }
     static func created(beforeOrOn date: Date) -> Self {
-        return .init(rawValue: "created:<=\(iso8601Formatter.string(from: date))")
+        return .init(rawValue: "created:<=\(ISO8601Formatter.string(from: date))")
     }
     static func created(between lowerBound: Date, and upperBound: Date) -> Self {
-        return .init(rawValue: "created:\(iso8601Formatter.string(from: lowerBound))..\(iso8601Formatter.string(from: upperBound))")
+        return .init(rawValue: "created:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
     }
     static func created(in range: ClosedRange<Date>) -> Self {
         return .created(between: range.lowerBound, and: range.upperBound)
