@@ -196,12 +196,12 @@ public protocol GitHubURLContainer {
     var others: OtherURLs { get }
 }
 public extension GitHubURLContainer where OtherURLs == Void {
-    var others: Void { return Void() }
+    var others: Void { return () }
 }
 
 public struct Empty: GitHubURLContainer {
-    public let apis = Void()
-    public let webpage = Void()
+    public let apis: Void = ()
+    public let webpage: Void = ()
 
     public init() {}
 }
