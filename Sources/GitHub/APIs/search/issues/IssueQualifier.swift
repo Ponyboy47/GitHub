@@ -36,7 +36,7 @@ extension IssueQualifier: OrganizationQualifiable {}
 extension IssueQualifier: RepositoryQualifiable {}
 
 // MARK: Support qualifying by issue state
-public enum IssueState: String, Decodable {
+public enum IssueState: String, Decodable, Hashable {
     case `open`
     case closed
 }

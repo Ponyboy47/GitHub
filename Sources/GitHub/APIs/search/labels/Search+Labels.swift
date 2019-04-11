@@ -53,25 +53,3 @@ public final class SearchLabels: GitHubAPI {
         return try call(options: options, page: page, perPage: perPage)
     }
 }
-
-public struct Label: GitHubResponseElement {
-    public let id: Int
-    public let nodeID: String
-    public let url: URL
-    public let name: String
-    public let color: String
-    public let `default`: Bool
-    public let description: String
-    public let score: Double?
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case nodeID = "node_id"
-        case url
-        case name
-        case color
-        case `default`
-        case description
-        case score
-    }
-}
