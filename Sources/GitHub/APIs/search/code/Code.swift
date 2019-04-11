@@ -19,7 +19,7 @@ public struct Code: GitHubResponseElement, Hashable {
     public let _api: URL
     public let _git: URL
     public let _html: URL
-    public let repository: Repository
+    public let repository: BasicRepository
     public let score: Double?
 
     enum CodingKeys: String, CodingKey {

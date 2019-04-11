@@ -21,7 +21,7 @@ public struct Commit: GitHubResponseElement, Hashable {
     public let author: User
     public let committer: User
     public let parents: [BasicCommit]
-    public let repository: Repository
+    public let repository: BasicRepository
     public let score: Double?
 
     enum CodingKeys: String, CodingKey {
