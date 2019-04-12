@@ -29,16 +29,19 @@ let response: [Code] = try gh.search.code.query(keywords: "addClass", qualifiers
 
 ## Authorizing GitHub:
 
-Follow the steps (here)[https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line] to create an access token.
+Follow the steps [here](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line) to create an access token.
 
 ## To do:
 - [ ] More tests
 - [ ] Implement missing APIs
-- [ ] Cache APIs which will infrequently change
-- [ ] Use stored URLs to make subsequent API calls
+- [ ] Cache APIs and use [conditional requests](https://developer.github.com/v3/#conditional-requests)
+- [ ] Use [stored URLs to make subsequent API calls](https://developer.github.com/v3/#hypermedia)
 - [ ] Error handling
   - [ ] Give the relevant GitHub error message instead of just `fatalError`ing on unsuccessful calls
-- [ ] Use the new `Callable` API once/if (SE-0253)[https://github.com/apple/swift-evolution/blob/master/proposals/0253-callable.md] becomes officially implemented and release (ie: Drop `.query` from search APIs, etc)
+- [ ] Use response headers
+  - [x] Store [Rate limit data](https://developer.github.com/v3/#rate-limiting)
+  - [ ] Save [links](https://developer.github.com/v3/#link-header) for proper [pagination](https://developer.github.com/v3/#pagination)
+- [ ] Use the new `Callable` API once/if [SE-0253](https://github.com/apple/swift-evolution/blob/master/proposals/0253-callable.md) becomes officially implemented and release (ie: Drop `.query` from search APIs, etc)
 
 ## License:
 MIT
