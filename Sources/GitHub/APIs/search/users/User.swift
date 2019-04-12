@@ -1,4 +1,5 @@
 import struct Foundation.URL
+import URITemplate
 
 public struct User: GitHubResponseElement, Hashable {
     public enum UserType: String, Decodable {
@@ -17,7 +18,7 @@ public struct User: GitHubResponseElement, Hashable {
     }()
 
     public let _api, _avatar, _html, _followers, _subscriptions, _organizations, _repos, _receivedEvents: URL
-    public let _following, _gists, _starred, _events: String
+    public let _following, _gists, _starred, _events: URITemplate
     public let type: UserType
     public let siteAdmin: Bool
     public let score: Double?

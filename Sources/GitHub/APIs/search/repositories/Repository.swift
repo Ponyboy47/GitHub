@@ -1,4 +1,5 @@
 import struct Foundation.URL
+import URITemplate
 
 private var repositoryURLsCache = [Repository: RepositoryURLs]()
 public struct Repository: GitHubResponseElement, Hashable {
@@ -36,8 +37,8 @@ public struct Repository: GitHubResponseElement, Hashable {
         _subscribers, _subscription, _merges, _downloads, _deployments, _git, _ssh, _clone, _svn: URL
     public let _keys, _collaborators, _issueEvents, _assignees, _branches, _blobs, _gitTags, _gitRefs, _trees,
         _statuses, _commits, _gitCommits, _comments, _issueComment, _contents, _compare, _archive, _issues,
-        _pulls, _milestones, _notifications, _labels, _releases: String
-    public let _homepage: String?
+        _pulls, _milestones, _notifications, _labels, _releases: URITemplate
+    public let _homepage: URITemplate?
     public let _mirror: URL?
     public let created: GitHubDate
     public let updated: GitHubDate

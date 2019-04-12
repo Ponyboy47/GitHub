@@ -1,16 +1,18 @@
 import struct Foundation.URL
+import URITemplate
 
 public struct BasicRepositoryURLs: GitHubURLContainer, Hashable {
     public let apis: APIURLs
     public let webpage: URL
 
-    public init(repository: URL, html: URL, forks: URL, keys: String, collaborators: String, teams: URL, hooks: URL,
-                issueEvents: String, events: URL, assignees: String, branches: String, tags: URL, blobs: String,
-                gitTags: String, gitRefs: String, trees: String, statuses: String, languages: URL, stargazers: URL,
-                contributors: URL, subscribers: URL, subscription: URL, commits: String, gitCommits: String,
-                comments: String, issueComment: String, contents: String, compare: String, merges: URL,
-                archive: String, downloads: URL, issues: String, pulls: String, milestones: String,
-                notifications: String, labels: String, releases: String, deployments: URL) {
+    public init(repository: URL, html: URL, forks: URL, keys: URITemplate, collaborators: URITemplate, teams: URL,
+                hooks: URL, issueEvents: URITemplate, events: URL, assignees: URITemplate, branches: URITemplate,
+                tags: URL, blobs: URITemplate, gitTags: URITemplate, gitRefs: URITemplate, trees: URITemplate,
+                statuses: URITemplate, languages: URL, stargazers: URL, contributors: URL, subscribers: URL,
+                subscription: URL, commits: URITemplate, gitCommits: URITemplate, comments: URITemplate,
+                issueComment: URITemplate, contents: URITemplate, compare: URITemplate, merges: URL,
+                archive: URITemplate, downloads: URL, issues: URITemplate, pulls: URITemplate, milestones: URITemplate,
+                notifications: URITemplate, labels: URITemplate, releases: URITemplate, deployments: URL) {
         apis = .init(repository: repository, forks: forks, keys: keys, collaborators: collaborators, teams: teams,
                      hooks: hooks, issueEvents: issueEvents, events: events, assignees: assignees, branches: branches,
                      tags: tags, blobs: blobs, gitTags: gitTags, gitRefs: gitRefs, trees: trees, statuses: statuses,
@@ -28,15 +30,17 @@ public struct BasicRepositoryURLs: GitHubURLContainer, Hashable {
             subscription, merges, downloads, deployments: URL
         public let _keys, _collaborators, _issueEvents, _assignees, _branches, _blobs, _gitTags, _gitRefs, _trees,
             _statuses, _commits, _gitCommits, _comments, _issueComment, _contents, _compare, _archive, _issues,
-            _pulls, _milestones, _notifications, _labels, _releases: String
+            _pulls, _milestones, _notifications, _labels, _releases: URITemplate
 
-        public init(repository: URL, forks: URL, keys: String, collaborators: String, teams: URL, hooks: URL,
-                    issueEvents: String, events: URL, assignees: String, branches: String, tags: URL, blobs: String,
-                    gitTags: String, gitRefs: String, trees: String, statuses: String, languages: URL, stargazers: URL,
-                    contributors: URL, subscribers: URL, subscription: URL, commits: String, gitCommits: String,
-                    comments: String, issueComment: String, contents: String, compare: String, merges: URL,
-                    archive: String, downloads: URL, issues: String, pulls: String, milestones: String,
-                    notifications: String, labels: String, releases: String, deployments: URL) {
+        public init(repository: URL, forks: URL, keys: URITemplate, collaborators: URITemplate, teams: URL, hooks: URL,
+                    issueEvents: URITemplate, events: URL, assignees: URITemplate, branches: URITemplate, tags: URL,
+                    blobs: URITemplate, gitTags: URITemplate, gitRefs: URITemplate, trees: URITemplate,
+                    statuses: URITemplate, languages: URL, stargazers: URL, contributors: URL, subscribers: URL,
+                    subscription: URL, commits: URITemplate, gitCommits: URITemplate, comments: URITemplate,
+                    issueComment: URITemplate, contents: URITemplate, compare: URITemplate, merges: URL,
+                    archive: URITemplate, downloads: URL, issues: URITemplate, pulls: URITemplate,
+                    milestones: URITemplate, notifications: URITemplate, labels: URITemplate, releases: URITemplate,
+                    deployments: URL) {
             self.repository = repository
             self.forks = forks
             _keys = keys

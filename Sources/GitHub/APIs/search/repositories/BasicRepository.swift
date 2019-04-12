@@ -1,4 +1,5 @@
 import struct Foundation.URL
+import URITemplate
 
 private var basicRepositoryURLsCache = [BasicRepository: BasicRepositoryURLs]()
 public struct BasicRepository: Decodable, Hashable {
@@ -36,7 +37,7 @@ public struct BasicRepository: Decodable, Hashable {
         _subscribers, _subscription, _merges, _downloads, _deployments: URL
     public let _keys, _collaborators, _issueEvents, _assignees, _branches, _blobs, _gitTags, _gitRefs, _trees,
         _statuses, _commits, _gitCommits, _comments, _issueComment, _contents, _compare, _archive, _issues,
-        _pulls, _milestones, _notifications, _labels, _releases: String
+        _pulls, _milestones, _notifications, _labels, _releases: URITemplate
 
     enum CodingKeys: String, CodingKey {
         case id, nodeID = "node_id", name, fullName = "full_name", owner, `private`, description, fork, _api = "url",
