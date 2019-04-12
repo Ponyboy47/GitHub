@@ -16,8 +16,6 @@ public final class SearchRepositories: GitHubAPI {
     }
 
     public static let endpoint = "repositories"
-    public static let requiresAuth = false
-    public static let method: HTTPMethod = .GET
 
     public let connector: GitHubConnector
 

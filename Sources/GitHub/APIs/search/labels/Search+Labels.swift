@@ -13,10 +13,8 @@ public final class SearchLabels: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint = "labels"
-    public static let requiresAuth = false
-    public static let method: HTTPMethod = .GET
     public static let customAcceptHeader: String? = "application/vnd.github.symmetra-preview+json"
+    public static let endpoint = "labels"
 
     public let connector: GitHubConnector
 

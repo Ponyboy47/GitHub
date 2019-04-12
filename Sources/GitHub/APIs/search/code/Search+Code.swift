@@ -13,8 +13,6 @@ public final class SearchCode: GitHubAPI {
     }
 
     public static let endpoint = "code"
-    public static let requiresAuth = true
-    public static let method: HTTPMethod = .GET
 
     public let connector: GitHubConnector
 

@@ -9,8 +9,6 @@ public final class SearchTopics: GitHubAPI {
 
     public static let customAcceptHeader: String? = "application/vnd.github.mercy-preview+json"
     public static let endpoint = "topics"
-    public static let requiresAuth = true
-    public static let method: HTTPMethod = .GET
 
     public let connector: GitHubConnector
 

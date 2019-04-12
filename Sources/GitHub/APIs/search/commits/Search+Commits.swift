@@ -15,8 +15,6 @@ public final class SearchCommits: GitHubAPI {
 
     public static let customAcceptHeader: String? = "application/vnd.github.cloak-preview"
     public static let endpoint = "commits"
-    public static let requiresAuth = false
-    public static let method: HTTPMethod = .GET
 
     public let connector: GitHubConnector
 

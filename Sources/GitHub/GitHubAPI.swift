@@ -79,7 +79,6 @@ public protocol GitHubAPI {
     static var customAcceptHeader: String? { get }
     static var name: String { get }
     static var endpoint: String { get }
-    static var requiresAuth: Bool { get }
     static var method: HTTPMethod { get }
 
     var connector: GitHubConnector { get }
@@ -122,7 +121,7 @@ public extension GitHubAPI {
         let request = generateRequest(options: options,
                                       page: page == 1 ? nil : page,
                                       perPage: perPage == githubPerPage ? nil : perPage)
-        return connector.send(request: request, withAuth: Self.requiresAuth)
+        return connector.send(request: request)
     }
 
     func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) throws -> Response {
@@ -135,6 +134,7 @@ public extension GitHubAPI {
 }
 
 extension GitHubAPI where Options == HTTPBody {
+    public static var method: HTTPMethod { return .POST }
     public func generateRequest(options: Options, page: Int?, perPage: Int?) -> HTTPRequest {
         var headers = defaultAPIHeaders
         if let accept = Self.customAcceptHeader {
@@ -145,6 +145,7 @@ extension GitHubAPI where Options == HTTPBody {
 }
 
 extension GitHubAPI where Options == URLQuery {
+    public static var method: HTTPMethod { return .GET }
     public func generateRequest(options: Options, page: Int?, perPage: Int?) -> HTTPRequest {
         var headers = defaultAPIHeaders
         if let accept = Self.customAcceptHeader {
@@ -219,9 +220,9 @@ public final class GitHubConnector {
         return HTTPClient.connect(scheme: .https, hostname: "api.github.com", on: worker)
     }
 
-    fileprivate func send(request: HTTPRequest, withAuth: Bool) -> Future<HTTPResponse> {
+    fileprivate func send(request: HTTPRequest) -> Future<HTTPResponse> {
         var req = request
-        if withAuth, let auth = auth {
+        if let auth = auth {
             if let basic = auth.basic {
                 req.headers.basicAuthorization = basic
             } else if let token = auth.token {
