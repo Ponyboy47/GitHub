@@ -1,6 +1,6 @@
+import struct Foundation.Date
 import HTTP
 import NIO
-import struct Foundation.Date
 
 public var numberOfThreads = System.coreCount
 public let URLPathSeparator = "/"
@@ -51,7 +51,7 @@ public struct URLQuery: GitHubRequestData {
 
     func url(base: String, page: Int?, perPage: Int?) -> String {
         var paging = ""
-        if (page != nil || perPage != nil) && !query.isEmpty {
+        if page != nil || perPage != nil, !query.isEmpty {
             paging += "&"
         }
 
@@ -103,6 +103,7 @@ public extension GitHubAPI {
     static func buildURLPath() -> String {
         return URLPathSeparator + Category.endpoint + URLPathSeparator + Self.endpoint
     }
+
     static func buildURLPath(page: Int?, perPage: Int?) -> String {
         var query = ""
         if page != nil || perPage != nil {
@@ -172,14 +173,17 @@ public protocol GitHubResponseRepresentable: Decodable {
     var incompleteResults: Bool { get }
     var items: [Element] { get }
 }
+
 public enum GitHubResponseKeys: String, CodingKey {
     case total = "total_count"
     case incompleteResults = "incomplete_results"
     case items
 }
+
 public extension GitHubResponseRepresentable {
     typealias CodingKeys = GitHubResponseKeys
 }
+
 public struct GitHubResponse<T: Decodable>: GitHubResponseRepresentable {
     public typealias CodingKeys = GitHubResponseKeys
 
@@ -193,6 +197,7 @@ public protocol GitHubResponseElement: Decodable {
     var urls: URLsContainer { get }
     var score: Double? { get }
 }
+
 public extension GitHubResponseElement where URLsContainer == Empty {
     var urls: Empty { return Empty() }
 }
@@ -206,6 +211,7 @@ public protocol GitHubURLContainer {
     var webpage: WebPageURL { get }
     var others: OtherURLs { get }
 }
+
 public extension GitHubURLContainer where OtherURLs == Void {
     var others: Void { return () }
 }
@@ -250,7 +256,7 @@ public final class GitHubConnector {
         }
 
         return connect().flatMap(to: HTTPResponse.self) { client in
-            return client.send(req)
+            client.send(req)
         }
     }
 }

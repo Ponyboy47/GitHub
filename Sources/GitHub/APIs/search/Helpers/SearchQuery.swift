@@ -11,5 +11,6 @@ public struct SearchQuery<Qualifier: SearchQualifier> {
             self.init(rawValue: "\(keywords.rawValue)+\(qualifiers.rawValue)")
         }
     }
+
     private init(rawValue: String) { self.rawValue = rawValue }
 }

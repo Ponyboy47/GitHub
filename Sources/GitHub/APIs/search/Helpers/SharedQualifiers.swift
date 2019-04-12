@@ -3,6 +3,7 @@ import struct Foundation.Date
 public protocol InQualifiable: SearchQualifier {
     associatedtype InQualifier: RawRepresentable where RawValue == String
 }
+
 public extension InQualifiable {
     static func `in`(_ qualifier: InQualifier) -> Self {
         return .init(rawValue: "in:\(qualifier.rawValue)")
@@ -28,12 +29,15 @@ public extension RepositoryQualifiable {
     static func repository(_ repo: String) -> Self {
         return .init(rawValue: "repo:\(repo)")
     }
+
     static func repository(_ repoName: String, user username: String) -> Self {
         return .repository("\(username)/\(repoName)")
     }
+
     static func repo(_ repo: String) -> Self {
         return .repository(repo)
     }
+
     static func repo(_ repoName: String, user username: String) -> Self {
         return .repository(repoName, user: username)
     }
@@ -44,27 +48,35 @@ public extension CreatedQualifiable {
     static func created(on date: Date) -> Self {
         return .init(rawValue: "created:\(ISO8601Formatter.string(from: date))")
     }
+
     static func created(after date: Date) -> Self {
         return .init(rawValue: "created:>\(ISO8601Formatter.string(from: date))")
     }
+
     static func created(afterOrOn date: Date) -> Self {
         return .init(rawValue: "created:>=\(ISO8601Formatter.string(from: date))")
     }
+
     static func created(before date: Date) -> Self {
         return .init(rawValue: "created:<\(ISO8601Formatter.string(from: date))")
     }
+
     static func created(beforeOrOn date: Date) -> Self {
         return .init(rawValue: "created:<=\(ISO8601Formatter.string(from: date))")
     }
+
     static func created(between lowerBound: Date, and upperBound: Date) -> Self {
         return .init(rawValue: "created:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
     }
+
     static func created(in range: ClosedRange<Date>) -> Self {
         return .created(between: range.lowerBound, and: range.upperBound)
     }
+
     static func created(in range: PartialRangeThrough<Date>) -> Self {
         return .created(beforeOrOn: range.upperBound)
     }
+
     static func created(in range: PartialRangeFrom<Date>) -> Self {
         return .created(afterOrOn: range.lowerBound)
     }
@@ -75,13 +87,16 @@ public extension PublicPrivateQualifiable {
     static var isPublic: Self {
         return .init(rawValue: "is:public")
     }
+
     static var isPrivate: Self {
         return .init(rawValue: "is:private")
     }
-    static func `is`(`public`: Bool) -> Self {
+
+    static func `is`(public: Bool) -> Self {
         return .init(rawValue: "is:\(`public` ? "public" : "private")")
     }
-    static func `is`(`private`: Bool) -> Self {
+
+    static func `is`(private: Bool) -> Self {
         return .init(rawValue: "is:\(`private` ? "private" : "public")")
     }
 }
@@ -91,6 +106,7 @@ public extension ArchivedQualifiable {
     static func archived(_ archived: Bool) -> Self {
         return .init(rawValue: "archived:\(archived)")
     }
+
     static var isArchived: Self {
         return .archived(true)
     }
@@ -106,31 +122,40 @@ public extension LanguageQualifiable {
 public protocol ByteSizeQualifiable: SearchQualifier {
     static var sizeKey: KeyPath<ByteSize, Int> { get }
 }
+
 public extension ByteSizeQualifiable {
     static func size(equals size: ByteSize) -> Self {
         return .init(rawValue: "size:\(size[keyPath: Self.sizeKey])")
     }
+
     static func size(greaterThan size: ByteSize) -> Self {
         return .init(rawValue: "size:>\(size[keyPath: Self.sizeKey])")
     }
+
     static func size(greaterThanOrEqualTo size: ByteSize) -> Self {
         return .init(rawValue: "size:>=\(size[keyPath: Self.sizeKey])")
     }
+
     static func size(lessThan size: ByteSize) -> Self {
         return .init(rawValue: "size:<\(size[keyPath: Self.sizeKey])")
     }
+
     static func size(lessThanOrEqualTo size: ByteSize) -> Self {
         return .init(rawValue: "size:<=\(size[keyPath: Self.sizeKey])")
     }
+
     static func size(between lowerBound: ByteSize, and upperBound: ByteSize) -> Self {
         return .init(rawValue: "size:\(lowerBound[keyPath: Self.sizeKey])..\(upperBound[keyPath: Self.sizeKey])")
     }
+
     static func size(in range: ClosedRange<ByteSize>) -> Self {
         return .size(between: range.lowerBound, and: range.upperBound)
     }
+
     static func size(in range: PartialRangeThrough<ByteSize>) -> Self {
         return .size(lessThanOrEqualTo: range.upperBound)
     }
+
     static func size(in range: PartialRangeFrom<ByteSize>) -> Self {
         return .size(greaterThanOrEqualTo: range.lowerBound)
     }

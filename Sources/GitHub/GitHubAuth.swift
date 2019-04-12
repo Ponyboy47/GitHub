@@ -7,7 +7,7 @@ public struct GitHubAuth {
 
     public init(basic: BasicAuthorization) {
         self.basic = basic
-        token = nil
+        self.token = nil
         // secret = nil
     }
 
@@ -17,7 +17,7 @@ public struct GitHubAuth {
 
     public init(token: TokenAuthorization) {
         self.token = token
-        basic = nil
+        self.basic = nil
         // secret = nil
     }
 
@@ -86,16 +86,16 @@ extension HTTPHeaders {
 //     let key: String
 //     let secret: String
 // }
-// 
+//
 // public extension GitHub {
 //     convenience init(secret: OAuthKeySecretAuthentication) {
 //         self.init(auth: .init(secret: secret))
 //     }
-// 
+//
 //     convenience init(key: String, secret: String) {
 //         self.init(auth: .init(key: key, secret: secret))
 //     }
-// 
+//
 //     convenience init(clientID id: String, secret: String) {
 //         self.init(auth: .init(clientID: id, secret: secret))
 //     }

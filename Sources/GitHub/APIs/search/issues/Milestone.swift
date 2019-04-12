@@ -16,6 +16,7 @@ public struct Milestone: Decodable, Hashable {
         milestoneURLsCache[self] = urls
         return urls
     }
+
     public let _api, _html, _labels: URL
     public let creator: User
     public let openIssues: Int
@@ -28,7 +29,7 @@ public struct Milestone: Decodable, Hashable {
 
     enum CodingKeys: String, CodingKey {
         case id, nodeID = "node_id", number, title, description, _api = "url", _html = "html_url",
-             _labels = "labels_url", creator, openIssues = "open_issues", closedIssues = "closed_issues",
-             state, created = "created_at", updated = "updated_at", due = "due_on", closed = "closed_at"
+            _labels = "labels_url", creator, openIssues = "open_issues", closedIssues = "closed_issues",
+            state, created = "created_at", updated = "updated_at", due = "due_on", closed = "closed_at"
     }
 }

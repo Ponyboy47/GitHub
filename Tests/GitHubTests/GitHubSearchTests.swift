@@ -1,5 +1,5 @@
-import XCTest
 @testable import GitHub
+import XCTest
 
 final class GitHubSearchTests: XCTestCase {
     func testSearchRepositories() {
@@ -44,6 +44,6 @@ final class GitHubSearchTests: XCTestCase {
         ("testSearchIssues", testSearchIssues),
         ("testSearchUsers", testSearchUsers),
         ("testSearchTopics", testSearchTopics),
-        ("testSearchLabels", testSearchLabels),
+        ("testSearchLabels", testSearchLabels)
     ]
 }

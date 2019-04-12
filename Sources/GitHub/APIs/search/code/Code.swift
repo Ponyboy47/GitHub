@@ -16,6 +16,7 @@ public struct Code: GitHubResponseElement, Hashable {
         codeURLsCache[self] = urls
         return urls
     }
+
     public let _api: URL
     public let _git: URL
     public let _html: URL

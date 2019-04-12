@@ -12,7 +12,7 @@ public struct SearchKeyword: ExpressibleByStringLiteral, RawRepresentable, Optio
 
     public init() { self.init(rawValue: "") }
     public init(rawValue: String) {
-        keywords = Set(rawValue.split(separator: "+").map { keyword in
+        self.keywords = Set(rawValue.split(separator: "+").map { keyword in
             guard keyword.contains(" ") else { return String(keyword) }
 
             if keyword.hasPrefix("NOT ") {
@@ -22,21 +22,24 @@ public struct SearchKeyword: ExpressibleByStringLiteral, RawRepresentable, Optio
                 }
 
                 return "NOT \"\(key)\""
-            } else if !keyword.hasPrefix("\"") && !keyword.hasSuffix("\"") {
+            } else if !keyword.hasPrefix("\""), !keyword.hasSuffix("\"") {
                 return "\"\(keyword)\""
             }
 
             return String(keyword)
         })
     }
+
     public init(stringLiteral value: String) { self.init(rawValue: value) }
 
     public mutating func formUnion(_ other: SearchKeyword) {
         keywords.formUnion(other.keywords)
     }
+
     public mutating func formIntersection(_ other: SearchKeyword) {
         keywords.formIntersection(other.keywords)
     }
+
     public mutating func formSymmetricDifference(_ other: SearchKeyword) {
         keywords.formSymmetricDifference(other.keywords)
     }

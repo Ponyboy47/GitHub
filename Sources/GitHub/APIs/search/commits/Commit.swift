@@ -14,6 +14,7 @@ public struct Commit: GitHubResponseElement, Hashable {
         commitURLsCache[self] = urls
         return urls
     }
+
     public let _api: URL
     public let _html: URL
     public let _comments: URL

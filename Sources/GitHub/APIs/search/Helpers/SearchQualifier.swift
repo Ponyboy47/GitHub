@@ -21,21 +21,24 @@ public extension SearchQualifier {
                 }
 
                 return String(qualifier)
-            } else if !qualifier.hasPrefix("\"") && !qualifier.hasSuffix("\"") {
+            } else if !qualifier.hasPrefix("\""), !qualifier.hasSuffix("\"") {
                 return "\"\(qualifier)\""
             }
 
             return String(qualifier)
         })
     }
+
     init(stringLiteral value: String) { self.init(rawValue: value) }
 
     mutating func formUnion(_ other: Self) {
         _qualifiers.formUnion(other._qualifiers)
     }
+
     mutating func formIntersection(_ other: Self) {
         _qualifiers.formIntersection(other._qualifiers)
     }
+
     mutating func formSymmetricDifference(_ other: Self) {
         _qualifiers.formSymmetricDifference(other._qualifiers)
     }
@@ -47,6 +50,7 @@ public enum ForkSearch: String {
 }
 
 // MARK: Support searching in forks
+
 public extension SearchQualifier {
     static func fork(_ fork: ForkSearch) -> Self {
         return .init(rawValue: "fork:\(fork.rawValue)")
@@ -74,6 +78,7 @@ public enum ReactionType: String {
 }
 
 // MARK: Support sort qualifiers
+
 public extension SearchQualifier {
     static func sortBy(interactions sort: SortOrdering) -> Self {
         return .init(rawValue: "sort:interactions-\(sort.rawValue)")
@@ -82,6 +87,7 @@ public extension SearchQualifier {
     static func sortBy(reactions sort: SortOrdering) -> Self {
         return .init(rawValue: "sort:reactions-\(sort.rawValue)")
     }
+
     static func sortBy(reactions type: ReactionType) -> Self {
         return .init(rawValue: "sort:reactions-\(type.rawValue)")
     }
@@ -100,6 +106,7 @@ public extension SearchQualifier {
 }
 
 // MARK: Support excluding qualifiers
+
 public extension SearchQualifier {
     static func exclude(_ qualifier: Self) -> Self {
         var raw: String = ""
@@ -126,12 +133,15 @@ public struct ByteSize: RawRepresentable, ExpressibleByIntegerLiteral, Equatable
     public static func bytes(_ value: Int) -> ByteSize {
         return .init(rawValue: value)
     }
+
     public static func kilobytes(_ value: Int) -> ByteSize {
         return .init(rawValue: value * 1024)
     }
+
     public static func megabytes(_ value: Int) -> ByteSize {
         return .init(rawValue: value * 1024 * 1024)
     }
+
     public static func gigabytes(_ value: Int) -> ByteSize {
         return .init(rawValue: value * 1024 * 1024 * 1024)
     }
@@ -139,6 +149,7 @@ public struct ByteSize: RawRepresentable, ExpressibleByIntegerLiteral, Equatable
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+
     public init(integerLiteral value: Int) {
         self.init(rawValue: value)
     }

@@ -28,10 +28,10 @@ public struct RepositoryURLs: GitHubURLContainer, Hashable {
 
     public struct APIURLs: Hashable {
         public let repository, forks, teams, hooks, events, tags, languages, stargazers, contributors, subscribers,
-                   subscription, merges, downloads, deployments: URL
+            subscription, merges, downloads, deployments: URL
         public let _keys, _collaborators, _issueEvents, _assignees, _branches, _blobs, _gitTags, _gitRefs, _trees,
-                   _statuses, _commits, _gitCommits, _comments, _issueComment, _contents, _compare, _archive, _issues,
-                   _pulls, _milestones, _notifications, _labels, _releases: String
+            _statuses, _commits, _gitCommits, _comments, _issueComment, _contents, _compare, _archive, _issues,
+            _pulls, _milestones, _notifications, _labels, _releases: String
 
         public init(repository: URL, forks: URL, keys: String, collaborators: String, teams: URL, hooks: URL,
                     issueEvents: String, events: URL, assignees: String, branches: String, tags: URL, blobs: String,

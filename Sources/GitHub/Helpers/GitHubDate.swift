@@ -1,6 +1,6 @@
 import struct Foundation.Date
-import class Foundation.ISO8601DateFormatter
 import class Foundation.DateFormatter
+import class Foundation.ISO8601DateFormatter
 import struct Foundation.Locale
 
 let ISO8601Formatter = ISO8601DateFormatter()
@@ -11,7 +11,6 @@ let AlternateISO8601Formatter: DateFormatter = {
     fmtr.timeZone = ISO8601Formatter.timeZone
     return fmtr
 }()
-
 
 public struct GitHubDate: Decodable, Hashable {
     public let date: Date

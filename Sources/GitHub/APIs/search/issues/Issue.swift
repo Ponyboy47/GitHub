@@ -12,6 +12,7 @@ public struct Issue: GitHubResponseElement, Hashable {
         issueURLsCache[self] = urls
         return urls
     }
+
     public let _api, _repository, _comments, _events, _html: URL
     public let _labels: String
     public let id: Int
@@ -36,9 +37,9 @@ public struct Issue: GitHubResponseElement, Hashable {
 
     enum CodingKeys: String, CodingKey {
         case _api = "url", _repository = "repository_url", _labels = "labels_url", _comments = "comments_url",
-        _events = "events_url", _html = "html_url", id, nodeID = "node_id", number, title, user, labels, state,
-        locked, assignee, assignees, milestone, comments, created = "created_at", updated = "updated_at",
-        closed = "closed_at", authorAssociation = "author_association", pullRequest = "pull_request", body,
-        score
+            _events = "events_url", _html = "html_url", id, nodeID = "node_id", number, title, user, labels, state,
+            locked, assignee, assignees, milestone, comments, created = "created_at", updated = "updated_at",
+            closed = "closed_at", authorAssociation = "author_association", pullRequest = "pull_request", body,
+            score
     }
 }
