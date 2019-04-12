@@ -7,7 +7,7 @@ public struct Label: GitHubResponseElement, Hashable {
     public let name: String
     public let color: String
     public let `default`: Bool
-    public let description: String
+    public let description: String?
     public let score: Double?
 
     enum CodingKeys: String, CodingKey {

@@ -32,16 +32,16 @@ public extension UserQualifier {
         return .init(rawValue: "repos:\(repos)")
     }
     static func repos(greaterThan repos: Int) -> UserQualifier {
-        return .init(rawValue: "repos:>\(repos)")
+        return .init(rawValue: "repos:%3E\(repos)")
     }
     static func repos(greaterThanOrEqualTo repos: Int) -> UserQualifier {
-        return .init(rawValue: "repos:>=\(repos)")
+        return .init(rawValue: "repos:%3E=\(repos)")
     }
     static func repos(lessThan repos: Int) -> UserQualifier {
-        return .init(rawValue: "repos:<\(repos)")
+        return .init(rawValue: "repos:%3C\(repos)")
     }
     static func repos(lessThanOrEqualTo repos: Int) -> UserQualifier {
-        return .init(rawValue: "repos:<=\(repos)")
+        return .init(rawValue: "repos:%3C=\(repos)")
     }
     static func repos(between lowerBound: Int, and upperBound: Int) -> UserQualifier {
         return .init(rawValue: "repos:\(lowerBound)..\(upperBound)")
@@ -76,16 +76,16 @@ public extension UserQualifier {
         return .init(rawValue: "followers:\(followers)")
     }
     static func followers(greaterThan followers: Int) -> UserQualifier {
-        return .init(rawValue: "followers:>\(followers)")
+        return .init(rawValue: "followers:%3E\(followers)")
     }
     static func followers(greaterThanOrEqualTo followers: Int) -> UserQualifier {
-        return .init(rawValue: "followers:>=\(followers)")
+        return .init(rawValue: "followers:%3E=\(followers)")
     }
     static func followers(lessThan followers: Int) -> UserQualifier {
-        return .init(rawValue: "followers:<\(followers)")
+        return .init(rawValue: "followers:%3C\(followers)")
     }
     static func followers(lessThanOrEqualTo followers: Int) -> UserQualifier {
-        return .init(rawValue: "followers:<=\(followers)")
+        return .init(rawValue: "followers:%3C=\(followers)")
     }
     static func followers(between lowerBound: Int, and upperBound: Int) -> UserQualifier {
         return .init(rawValue: "followers:\(lowerBound)..\(upperBound)")

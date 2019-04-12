@@ -16,6 +16,7 @@ public final class SearchLabels: GitHubAPI {
     public static let endpoint = "labels"
     public static let requiresAuth = false
     public static let method: HTTPMethod = .GET
+    public static let customAcceptHeader: String? = "application/vnd.github.symmetra-preview+json"
 
     public let connector: GitHubConnector
 
