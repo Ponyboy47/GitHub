@@ -13,7 +13,7 @@ public final class SearchLabels: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint = "lables"
+    public static let endpoint = "labels"
     public static let requiresAuth = false
     public static let method: HTTPMethod = .GET
 
