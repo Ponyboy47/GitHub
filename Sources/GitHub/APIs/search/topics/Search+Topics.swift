@@ -8,7 +8,7 @@ public final class SearchTopics: GitHubAPI {
     public typealias SortOptions = Void
 
     public static let customAcceptHeader: String? = "application/vnd.github.mercy-preview+json"
-    public static let endpoint = "code"
+    public static let endpoint = "topics"
     public static let requiresAuth = true
     public static let method: HTTPMethod = .GET
 

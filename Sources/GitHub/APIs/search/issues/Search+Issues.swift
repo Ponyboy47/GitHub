@@ -26,7 +26,7 @@ public final class SearchIssues: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint = "code"
+    public static let endpoint = "issues"
     public static let requiresAuth = false
     public static let method: HTTPMethod = .GET
 
