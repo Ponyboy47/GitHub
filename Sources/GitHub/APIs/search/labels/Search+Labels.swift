@@ -3,7 +3,7 @@ import HTTP
 public final class SearchLabels: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
-    public typealias Element = Label
+    public typealias Response = GitHubSearchResponse<Label>
 
     public enum SortOptions: String {
         case created

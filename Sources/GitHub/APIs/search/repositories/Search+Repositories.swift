@@ -3,7 +3,7 @@ import HTTP
 public final class SearchRepositories: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
-    public typealias Element = Repository
+    public typealias Response = GitHubSearchResponse<Repository>
 
     public enum SortOptions: String {
         case stars

@@ -3,7 +3,7 @@ import HTTP
 public final class SearchUsers: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
-    public typealias Element = User
+    public typealias Response = GitHubSearchResponse<User>
 
     public enum SortOptions: String {
         case followers

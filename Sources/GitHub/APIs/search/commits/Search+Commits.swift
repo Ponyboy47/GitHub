@@ -3,7 +3,7 @@ import HTTP
 public final class SearchCommits: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
-    public typealias Element = Commit
+    public typealias Response = GitHubSearchResponse<Commit>
 
     public enum SortOptions: String {
         case authorDate = "author-date"

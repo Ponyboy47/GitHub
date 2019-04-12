@@ -5,7 +5,7 @@ public typealias SearchPullRequests = SearchIssues
 public final class SearchIssues: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
-    public typealias Element = Issue
+    public typealias Response = GitHubSearchResponse<Issue>
 
     public enum SortOptions: String {
         case comments

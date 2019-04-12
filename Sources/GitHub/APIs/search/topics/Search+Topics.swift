@@ -3,7 +3,7 @@ import HTTP
 public final class SearchTopics: GitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
-    public typealias Element = Topic
+    public typealias Response = GitHubSearchResponse<Topic>
 
     public typealias SortOptions = Void
 
