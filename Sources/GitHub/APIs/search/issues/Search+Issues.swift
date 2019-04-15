@@ -2,7 +2,7 @@ import HTTP
 
 public typealias SearchPullRequests = SearchIssues
 
-public final class SearchIssues: GitHubAPI {
+public final class SearchIssues: CategorizedGitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
     public typealias Response = GitHubSearchResponse<Issue>

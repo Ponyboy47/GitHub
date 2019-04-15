@@ -1,6 +1,6 @@
 import HTTP
 
-public final class SearchRepositories: GitHubAPI {
+public final class SearchRepositories: CategorizedGitHubAPI {
     public typealias Category = SearchCategory
     public typealias Options = URLQuery
     public typealias Response = GitHubSearchResponse<Repository>

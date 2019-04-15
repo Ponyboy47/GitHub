@@ -9,7 +9,6 @@ public protocol GitHubAPICategory: AnyObject {
 }
 
 public protocol GitHubAPI {
-    associatedtype Category: GitHubAPICategory
     associatedtype Options: GitHubRequestData
     associatedtype Response: GitHubResponseRepresentable
 
@@ -23,6 +22,13 @@ public protocol GitHubAPI {
     init(connector: GitHubConnector)
 
     func generateRequest(options: Options, page: Int?, perPage: Int?) -> HTTPRequest
+
+    static func buildURLPath() -> String
+    static func buildURLPath(page: Int?, perPage: Int?) -> String
+}
+
+public protocol CategorizedGitHubAPI: GitHubAPI {
+    associatedtype Category: GitHubAPICategory
 }
 
 public extension GitHubAPI {
@@ -33,6 +39,51 @@ public extension GitHubAPI {
     var rateLimitRemaining: Int? { return connector.rateLimitRemaining }
     var rateLimitReset: Date? { return connector.rateLimitReset }
 
+    static func buildURLPath() -> String {
+        return URLPathSeparator + Self.endpoint
+    }
+
+    static func buildURLPath(page: Int?, perPage: Int?) -> String {
+        var query = ""
+        if page != nil || perPage != nil {
+            query += "?"
+        }
+
+        if let page = page {
+            query += "page=\(page)"
+        }
+        if let perPage = perPage {
+            if query.count > 1 {
+                query += "&"
+            }
+            query += "per_page=\(perPage)"
+        }
+
+        return URLPathSeparator + Self.endpoint + query
+    }
+
+    func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) -> Future<HTTPResponse> {
+        let page = page.clamped(to: 1...Int.max)
+        let perPage = perPage.clamped(to: 1...githubPerPageMax)
+
+        let request = generateRequest(options: options,
+                                      page: page == 1 ? nil : page,
+                                      perPage: perPage == githubPerPage ? nil : perPage)
+        return connector.send(request: request)
+    }
+
+    func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) throws -> Response {
+        let response = try call(options: options, page: page, perPage: perPage).wait()
+        connector.updated(headers: response.headers)
+        guard response.status == .ok else {
+            print(response.status)
+            fatalError("Response failed with status: \(response.status)")
+        }
+        return try githubBodyDecoder.decode(Response.self, from: response.body.description)
+    }
+}
+
+public extension CategorizedGitHubAPI {
     static func buildURLPath() -> String {
         return URLPathSeparator + Category.endpoint + URLPathSeparator + Self.endpoint
     }
@@ -54,26 +105,6 @@ public extension GitHubAPI {
         }
 
         return URLPathSeparator + Category.endpoint + URLPathSeparator + Self.endpoint + query
-    }
-
-    func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) -> Future<HTTPResponse> {
-        let page = page.clamped(to: 1...Int.max)
-        let perPage = perPage.clamped(to: 1...githubPerPageMax)
-
-        let request = generateRequest(options: options,
-                                      page: page == 1 ? nil : page,
-                                      perPage: perPage == githubPerPage ? nil : perPage)
-        return connector.send(request: request)
-    }
-
-    func call(options: Options, page: Int = 1, perPage: Int = githubPerPage) throws -> Response {
-        let response = try call(options: options, page: page, perPage: perPage).wait()
-        connector.updated(headers: response.headers)
-        guard response.status == .ok else {
-            print(response.status)
-            fatalError("Response failed with status: \(response.status)")
-        }
-        return try githubBodyDecoder.decode(Response.self, from: response.body.description)
     }
 }
 
