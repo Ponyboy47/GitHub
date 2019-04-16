@@ -4,24 +4,26 @@ import NIO
 import URITemplate
 
 public protocol EndpointRepresentable {
-    func stringValue(_ parameters: [String: String]) -> String
+    func stringValue(_ parameters: [String: Any]) -> String
 }
 
 extension String: EndpointRepresentable {
-    public func stringValue(_: [String: String]) -> String { return self }
+    public func stringValue(_: [String: Any]) -> String { return self }
 }
 
 extension URITemplate: EndpointRepresentable {
-    public func stringValue(_ parameters: [String: String]) -> String {
+    public func stringValue(_ parameters: [String: Any]) -> String {
         return expand(parameters)
     }
 }
 
-public protocol GitHubAPICategory: AnyObject {
+public protocol GitHubAPICollection: AnyObject {
+    init(connector: GitHubConnector)
+}
+
+public protocol GitHubAPICategory: GitHubAPICollection {
     associatedtype Endpoint: EndpointRepresentable
     static var endpoint: Endpoint { get }
-
-    init(connector: GitHubConnector)
 }
 
 public protocol GitHubAPI {
@@ -38,10 +40,10 @@ public protocol GitHubAPI {
 
     init(connector: GitHubConnector)
 
-    func generateRequest(_ parameters: [String: String], options: Options, page: Int?, perPage: Int?) -> HTTPRequest
+    func generateRequest(_ parameters: [String: Any], options: Options, page: Int?, perPage: Int?) -> HTTPRequest
 
-    static func buildURLPath(_ parameters: [String: String]) -> String
-    static func buildURLPath(_ parameters: [String: String], page: Int?, perPage: Int?) -> String
+    static func buildURLPath(_ parameters: [String: Any]) -> String
+    static func buildURLPath(_ parameters: [String: Any], page: Int?, perPage: Int?) -> String
 }
 
 public protocol CategorizedGitHubAPI: GitHubAPI {
@@ -56,11 +58,11 @@ public extension GitHubAPI {
     var rateLimitRemaining: Int? { return connector.rateLimitRemaining }
     var rateLimitReset: Date? { return connector.rateLimitReset }
 
-    static func buildURLPath(_ parameters: [String: String]) -> String {
+    static func buildURLPath(_ parameters: [String: Any]) -> String {
         return URLPathSeparator + Self.endpoint.stringValue(parameters)
     }
 
-    static func buildURLPath(_ parameters: [String: String], page: Int?, perPage: Int?) -> String {
+    static func buildURLPath(_ parameters: [String: Any], page: Int?, perPage: Int?) -> String {
         var query = ""
         if page != nil || perPage != nil {
             query += "?"
@@ -79,7 +81,7 @@ public extension GitHubAPI {
         return URLPathSeparator + Self.endpoint.stringValue(parameters) + query
     }
 
-    func call(_ parameters: [String: String] = [:],
+    func call(_ parameters: [String: Any] = [:],
               options: Options,
               page: Int = 1,
               perPage: Int = githubPerPage) -> Future<HTTPResponse> {
@@ -93,14 +95,13 @@ public extension GitHubAPI {
         return connector.send(request: request)
     }
 
-    func call(_: [String: String] = [:],
+    func call(_ parameters: [String: Any] = [:],
               options: Options,
               page: Int = 1,
               perPage: Int = githubPerPage) throws -> Response {
-        let response = try call(options: options, page: page, perPage: perPage).wait()
+        let response = try call(parameters, options: options, page: page, perPage: perPage).wait()
         connector.updated(headers: response.headers)
         guard response.status == .ok else {
-            print(response.status)
             fatalError("Response failed with status: \(response.status)")
         }
         return try githubBodyDecoder.decode(Response.self, from: response.body.description)
@@ -108,11 +109,11 @@ public extension GitHubAPI {
 }
 
 public extension CategorizedGitHubAPI {
-    static func buildURLPath(_ parameters: [String: String]) -> String {
+    static func buildURLPath(_ parameters: [String: Any]) -> String {
         return URLPathSeparator + Category.endpoint.stringValue(parameters) + URLPathSeparator + Self.endpoint.stringValue(parameters)
     }
 
-    static func buildURLPath(_ parameters: [String: String], page: Int?, perPage: Int?) -> String {
+    static func buildURLPath(_ parameters: [String: Any], page: Int?, perPage: Int?) -> String {
         var query = ""
         if page != nil || perPage != nil {
             query += "?"
@@ -134,7 +135,7 @@ public extension CategorizedGitHubAPI {
 
 extension GitHubAPI where Options == HTTPBody {
     public static var method: HTTPMethod { return .POST }
-    public func generateRequest(_ parameters: [String: String],
+    public func generateRequest(_ parameters: [String: Any],
                                 options: Options,
                                 page: Int?,
                                 perPage: Int?) -> HTTPRequest {
@@ -153,7 +154,7 @@ extension GitHubAPI where Options == HTTPBody {
 
 extension GitHubAPI where Options == URLQuery {
     public static var method: HTTPMethod { return .GET }
-    public func generateRequest(_ parameters: [String: String],
+    public func generateRequest(_ parameters: [String: Any],
                                 options: Options,
                                 page: Int?,
                                 perPage: Int?) -> HTTPRequest {

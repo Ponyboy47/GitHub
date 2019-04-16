@@ -2,8 +2,6 @@ import HTTP
 
 public protocol GitHubResponseRepresentable: Decodable {
     associatedtype Element: Decodable
-
-    var items: [Element] { get }
 }
 
 public protocol GitHubResponseElement: Decodable {
@@ -35,3 +33,5 @@ public struct Empty: GitHubURLContainer {
 
     public init() {}
 }
+
+extension Array: GitHubResponseRepresentable where Element: Decodable {}
