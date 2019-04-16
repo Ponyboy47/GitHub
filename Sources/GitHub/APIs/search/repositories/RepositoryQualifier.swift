@@ -116,27 +116,27 @@ extension RepositoryQualifier: CreatedQualifiable {}
 
 public extension RepositoryQualifier {
     static func pushed(on date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:\(ISO8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:\(date.iso8601)")
     }
 
     static func pushed(after date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:%3E\(ISO8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:%3E\(date.iso8601)")
     }
 
     static func pushed(afterOrOn date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:%3E=\(ISO8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:%3E=\(date.iso8601)")
     }
 
     static func pushed(before date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:%3C\(ISO8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:%3C\(date.iso8601)")
     }
 
     static func pushed(beforeOrOn date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:%3C=\(ISO8601Formatter.string(from: date))")
+        return .init(rawValue: "pushed:%3C=\(date.iso8601)")
     }
 
     static func pushed(between lowerBound: Date, and upperBound: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:\(ISO8601Formatter.string(from: lowerBound))..\(ISO8601Formatter.string(from: upperBound))")
+        return .init(rawValue: "pushed:\(lowerBound.iso8601)..\(upperBound.iso8601)")
     }
 
     static func pushed(in range: ClosedRange<Date>) -> RepositoryQualifier {

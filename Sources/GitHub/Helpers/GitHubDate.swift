@@ -28,6 +28,8 @@ public struct GitHubDate: Decodable, Hashable {
     }
 }
 
-public enum DecodingError: Error {
-    case invalidISO8601DateString(String)
+public extension Date {
+    var iso8601: String {
+        return ISO8601Formatter.string(from: self)
+    }
 }
