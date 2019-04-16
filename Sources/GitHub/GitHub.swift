@@ -8,12 +8,14 @@ public final class GitHub {
     public var rateLimitReset: Date? { return connector.rateLimitReset }
 
     public let search: SearchCategory
+    public let gists: GistsAPICollection
 
     public init(auth: GitHubAuth? = nil) {
         let connector = GitHubConnector(auth: auth)
 
         self.connector = connector
         search = .init(connector: connector)
+        gists = .init(connector: connector)
     }
 }
 
