@@ -57,7 +57,7 @@ public extension SearchQualifier {
     }
 }
 
-public enum SortOrdering: String {
+public enum SortOrdering: String, RestfulParameter {
     case asc
     case desc
 

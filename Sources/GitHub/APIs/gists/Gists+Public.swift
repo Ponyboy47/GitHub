@@ -1,12 +1,11 @@
 import struct Foundation.Date
 import HTTP
+import URITemplate
 
 public final class PublicGists: GitHubAPI {
-    public typealias Options = URLQuery
     public typealias Response = [Gist]
 
-    public static let endpoint = "gists/public"
-    public static let method: HTTPMethod = .GET
+    public static let endpoint: URITemplate = "/gists/public"
 
     public let connector: GitHubConnector
 
@@ -15,10 +14,10 @@ public final class PublicGists: GitHubAPI {
     }
 
     public func query(since date: Date? = nil) throws -> Response {
-        var options = Options()
+        var options = [String: RestfulParameter]()
         if let date = date {
-            options.add(option: "since", value: date.iso8601)
+            options["since"] = date.iso8601
         }
-        return try call(options: options)
+        return try get(parameters: options)
     }
 }

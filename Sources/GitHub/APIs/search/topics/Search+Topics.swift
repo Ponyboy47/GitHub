@@ -1,14 +1,18 @@
 import HTTP
+import URITemplate
 
-public final class SearchTopics: CategorizedGitHubAPI {
-    public typealias Category = SearchCategory
-    public typealias Options = URLQuery
+public final class SearchTopics: GitHubAPI {
     public typealias Response = GitHubSearchResponse<Topic>
 
     public typealias SortOptions = Void
 
-    public static let customAcceptHeader: String? = "application/vnd.github.mercy-preview+json"
-    public static let endpoint = "topics"
+    public static let requiredHeaders: HTTPHeaders = {
+        var headers = defaultAPIHeaders
+        headers.replaceOrAdd(name: .accept, value: "application/vnd.github.mercy-preview+json")
+        return headers
+    }()
+
+    public static let endpoint: URITemplate = "/search/topics"
 
     public let connector: GitHubConnector
 
@@ -33,9 +37,11 @@ public final class SearchTopics: CategorizedGitHubAPI {
     public func query(_ string: String,
                       page: Int = 1,
                       perPage: Int = githubPerPage) throws -> Response {
-        var options = Options()
-        options.add(option: "q", value: string)
+        var options = [String: RestfulParameter]()
+        options["q"] = string
+        options["page"] = page
+        options["perPage"] = perPage
 
-        return try call(options: options, page: page, perPage: perPage)
+        return try get(parameters: options)
     }
 }

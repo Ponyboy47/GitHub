@@ -1,8 +1,6 @@
 import struct Foundation.Date
 
-public final class SearchCategory: GitHubAPICategory {
-    public static let endpoint = "search"
-
+public final class SearchCategory {
     public let repositories: SearchRepositories
     public let commits: SearchCommits
     public let code: SearchCode

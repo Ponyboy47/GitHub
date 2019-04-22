@@ -3,11 +3,9 @@ import HTTP
 import URITemplate
 
 public final class UserGists: GitHubAPI {
-    public typealias Options = URLQuery
     public typealias Response = [Gist]
 
-    public static let endpoint: URITemplate = "users/{username}/gists"
-    public static let method: HTTPMethod = .GET
+    public static let endpoint: URITemplate = "/users/{username}/gists"
 
     public let connector: GitHubConnector
 
@@ -16,10 +14,11 @@ public final class UserGists: GitHubAPI {
     }
 
     public func query(_ username: String, since date: Date? = nil) throws -> Response {
-        var options = Options()
+        var options = [String: RestfulParameter]()
+        options["username"] = username.lowercased()
         if let date = date {
-            options.add(option: "since", value: date.iso8601)
+            options["since"] = date.iso8601
         }
-        return try call(["username": username], options: options)
+        return try get(parameters: options)
     }
 }

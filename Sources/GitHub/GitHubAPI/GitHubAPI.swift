@@ -3,177 +3,58 @@ import HTTP
 import NIO
 import URITemplate
 
-public protocol EndpointRepresentable {
-    func stringValue(_ parameters: [String: Any]) -> String
-}
-
-extension String: EndpointRepresentable {
-    public func stringValue(_: [String: Any]) -> String { return self }
-}
-
-extension URITemplate: EndpointRepresentable {
-    public func stringValue(_ parameters: [String: Any]) -> String {
-        return expand(parameters)
-    }
-}
-
-public protocol GitHubAPICollection: AnyObject {
-    init(connector: GitHubConnector)
-}
-
-public protocol GitHubAPICategory: GitHubAPICollection {
-    associatedtype Endpoint: EndpointRepresentable
-    static var endpoint: Endpoint { get }
-}
-
-public protocol GitHubAPI {
-    associatedtype Options: GitHubRequestData
-    associatedtype Response: GitHubResponseRepresentable
-    associatedtype Endpoint: EndpointRepresentable = String
-
-    static var customAcceptHeader: String? { get }
-    static var name: String { get }
-    static var endpoint: Endpoint { get }
-    static var method: HTTPMethod { get }
-
+public protocol GitHubAPI: RestfulAPI {
     var connector: GitHubConnector { get }
 
     init(connector: GitHubConnector)
-
-    func generateRequest(_ parameters: [String: Any], options: Options, page: Int?, perPage: Int?) -> HTTPRequest
-
-    static func buildURLPath(_ parameters: [String: Any]) -> String
-    static func buildURLPath(_ parameters: [String: Any], page: Int?, perPage: Int?) -> String
-}
-
-public protocol CategorizedGitHubAPI: GitHubAPI {
-    associatedtype Category: GitHubAPICategory
 }
 
 public extension GitHubAPI {
-    static var customAcceptHeader: String? { return nil }
-    static var name: String { return "\(Self.self)" }
+    static var requiredHeaders: HTTPHeaders { return defaultAPIHeaders }
 
     var rateLimit: Int? { return connector.rateLimit }
     var rateLimitRemaining: Int? { return connector.rateLimitRemaining }
     var rateLimitReset: Date? { return connector.rateLimitReset }
 
-    static func buildURLPath(_ parameters: [String: Any]) -> String {
-        return URLPathSeparator + Self.endpoint.stringValue(parameters)
-    }
-
-    static func buildURLPath(_ parameters: [String: Any], page: Int?, perPage: Int?) -> String {
-        var query = ""
-        if page != nil || perPage != nil {
-            query += "?"
-        }
-
-        if let page = page {
-            query += "page=\(page)"
-        }
-        if let perPage = perPage {
-            if query.count > 1 {
-                query += "&"
-            }
-            query += "per_page=\(perPage)"
-        }
-
-        return URLPathSeparator + Self.endpoint.stringValue(parameters) + query
-    }
-
-    func call(_ parameters: [String: Any] = [:],
-              options: Options,
-              page: Int = 1,
-              perPage: Int = githubPerPage) -> Future<HTTPResponse> {
-        let page = page.clamped(to: 1...Int.max)
-        let perPage = perPage.clamped(to: 1...githubPerPageMax)
-
-        let request = generateRequest(parameters,
-                                      options: options,
-                                      page: page == 1 ? nil : page,
-                                      perPage: perPage == githubPerPage ? nil : perPage)
+    func call(parameters: [String: RestfulParameter], method: HTTPMethod) -> Future<HTTPResponse> {
+        let request = generateRequest(parameters: parameters, method: method)
         return connector.send(request: request)
     }
 
-    func call(_ parameters: [String: Any] = [:],
-              options: Options,
-              page: Int = 1,
-              perPage: Int = githubPerPage) throws -> Response {
-        let response = try call(parameters, options: options, page: page, perPage: perPage).wait()
+    func call<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter], method: HTTPMethod) throws -> R {
+        let response = try call(parameters: parameters, method: method).wait()
         connector.updated(headers: response.headers)
         guard response.status == .ok else {
             fatalError("Response failed with status: \(response.status)")
         }
-        return try githubBodyDecoder.decode(Response.self, from: response.body.description)
-    }
-}
-
-public extension CategorizedGitHubAPI {
-    static func buildURLPath(_ parameters: [String: Any]) -> String {
-        return URLPathSeparator + Category.endpoint.stringValue(parameters) + URLPathSeparator + Self.endpoint.stringValue(parameters)
+        return try githubBodyDecoder.decode(R.self, from: response.body.description)
     }
 
-    static func buildURLPath(_ parameters: [String: Any], page: Int?, perPage: Int?) -> String {
-        var query = ""
-        if page != nil || perPage != nil {
-            query += "?"
-        }
-
-        if let page = page {
-            query += "page=\(page)"
-        }
-        if let perPage = perPage {
-            if query.count > 1 {
-                query += "&"
-            }
-            query += "per_page=\(perPage)"
-        }
-
-        return URLPathSeparator + Category.endpoint.stringValue(parameters) + URLPathSeparator + Self.endpoint.stringValue(parameters) + query
+    func get<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
+        return try call(parameters: parameters, method: .GET)
     }
-}
 
-extension GitHubAPI where Options == HTTPBody {
-    public static var method: HTTPMethod { return .POST }
-    public func generateRequest(_ parameters: [String: Any],
-                                options: Options,
-                                page: Int?,
-                                perPage: Int?) -> HTTPRequest {
-        var headers = defaultAPIHeaders
-        if let accept = Self.customAcceptHeader {
-            headers.replaceOrAdd(name: .accept, value: accept)
-        }
-        return .init(method: Self.method,
-                     url: Self.buildURLPath(parameters,
-                                            page: page,
-                                            perPage: perPage),
-                     headers: headers,
-                     body: options)
+    func head<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
+        return try call(parameters: parameters, method: .HEAD)
     }
-}
 
-extension GitHubAPI where Options == URLQuery {
-    public static var method: HTTPMethod { return .GET }
-    public func generateRequest(_ parameters: [String: Any],
-                                options: Options,
-                                page: Int?,
-                                perPage: Int?) -> HTTPRequest {
-        var headers = defaultAPIHeaders
-        if let accept = Self.customAcceptHeader {
-            headers.replaceOrAdd(name: .accept, value: accept)
-        }
-        return .init(method: Self.method,
-                     url: options.url(base: Self.buildURLPath(parameters),
-                                      page: page,
-                                      perPage: perPage),
-                     headers: headers)
+    func post<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
+        return try call(parameters: parameters, method: .POST)
+    }
+
+    func put<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
+        return try call(parameters: parameters, method: .PUT)
+    }
+
+    func delete<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
+        return try call(parameters: parameters, method: .DELETE)
     }
 }
 
 public final class GitHubConnector {
     private let worker = MultiThreadedEventLoopGroup(numberOfThreads: numberOfThreads)
 
-    private let auth: GitHubAuth?
+    let auth: GitHubAuth?
     public private(set) var rateLimit: Int?
     public private(set) var rateLimitRemaining: Int?
     public private(set) var rateLimitReset: Date?

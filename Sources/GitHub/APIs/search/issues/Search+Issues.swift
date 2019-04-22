@@ -1,13 +1,12 @@
 import HTTP
+import URITemplate
 
 public typealias SearchPullRequests = SearchIssues
 
-public final class SearchIssues: CategorizedGitHubAPI {
-    public typealias Category = SearchCategory
-    public typealias Options = URLQuery
+public final class SearchIssues: GitHubAPI {
     public typealias Response = GitHubSearchResponse<Issue>
 
-    public enum SortOptions: String {
+    public enum SortOptions: String, RestfulParameter {
         case comments
         case reactions
         case plus1 = "reactions-+1"
@@ -26,7 +25,7 @@ public final class SearchIssues: CategorizedGitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint = "issues"
+    public static let endpoint: URITemplate = "/search/issues"
 
     public let connector: GitHubConnector
 
@@ -57,17 +56,19 @@ public final class SearchIssues: CategorizedGitHubAPI {
                       order: SortOrdering = .default,
                       page: Int = 1,
                       perPage: Int = githubPerPage) throws -> Response {
-        var options = Options()
-        options.add(option: "q", value: string)
+        var options = [String: RestfulParameter]()
+        options["q"] = string
         if order != .default {
-            options.add(option: "order", value: order)
+            options["order"] = order
 
             // The sort parameter is ignored if the ordering is not specified
             if sort != .default {
-                options.add(option: "sort", value: sort)
+                options["sort"] = sort
             }
         }
+        options["page"] = page
+        options["perPage"] = perPage
 
-        return try call(options: options, page: page, perPage: perPage)
+        return try get(parameters: options)
     }
 }

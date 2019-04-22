@@ -4,7 +4,7 @@ import XCTest
 final class GitHubGistsTests: XCTestCase {
     func testGetUserGists() {
         let gh = GitHub()
-        XCTAssertNoThrow(try gh.gists.user.query("ponyboy47"))
+        XCTAssertNoThrow(try gh.gists.user.query("Ponyboy47"))
     }
 
     func testGetPublicGists() {
