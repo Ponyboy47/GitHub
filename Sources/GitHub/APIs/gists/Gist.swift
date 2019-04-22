@@ -1,7 +1,7 @@
 import struct Foundation.URL
 
 private var gistURLs = [Gist: GistURLs]()
-public struct Gist: Decodable, Hashable {
+public struct Gist: GitHubResponseRepresentable, Hashable {
     public let id: String
     public let nodeID: String
     public var urls: GistURLs {

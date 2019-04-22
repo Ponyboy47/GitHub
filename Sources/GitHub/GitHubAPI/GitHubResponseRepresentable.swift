@@ -1,8 +1,6 @@
 import HTTP
 
-public protocol GitHubResponseRepresentable: Decodable {
-    associatedtype Element: Decodable
-}
+public protocol GitHubResponseRepresentable: Decodable {}
 
 public protocol GitHubResponseElement: Decodable {
     associatedtype URLsContainer: GitHubURLContainer = Empty

@@ -15,7 +15,7 @@ public final class UserGists: GitHubAPI {
 
     public func query(_ username: String, since date: Date? = nil) throws -> Response {
         var options = [String: RestfulParameter]()
-        options["username"] = username.lowercased()
+        options["username"] = username
         if let date = date {
             options["since"] = date.iso8601
         }

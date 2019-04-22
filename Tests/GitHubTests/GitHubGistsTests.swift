@@ -12,8 +12,14 @@ final class GitHubGistsTests: XCTestCase {
         XCTAssertNoThrow(try gh.gists.public.query())
     }
 
+    func testGetGistsByID() {
+        let gh = GitHub()
+        XCTAssertNoThrow(try gh.gists.id.query("f8213da3018fac99daf3d27d67f36903"))
+    }
+
     static var allTests = [
         ("testGetUserGists", testGetUserGists),
-        ("testGetPublicGists", testGetPublicGists)
+        ("testGetPublicGists", testGetPublicGists),
+        ("testGetGistsByID", testGetGistsByID)
     ]
 }
