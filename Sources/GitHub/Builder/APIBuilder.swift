@@ -11,9 +11,7 @@ public protocol RestfulAPI {
 
 public extension RestfulAPI {
     func generateRequest(parameters: [String: RestfulParameter], method: HTTPMethod) -> HTTPRequest {
-        let url = Self.endpoint.expand(parameters)
-        let vars = Self.endpoint.variables
-        var data = parameters.filter { !vars.contains($0.0) }
+        var data = parameters
         if let page = data["page"] as? Int, page <= 1 {
             data.removeValue(forKey: "page")
         }
@@ -26,6 +24,7 @@ public extension RestfulAPI {
                 data["perPage"] = githubPerPageMax
             }
         }
+        let url = Self.endpoint.expand(data)
 
         var headers = defaultAPIHeaders
         for header in Self.requiredHeaders {
@@ -34,7 +33,7 @@ public extension RestfulAPI {
 
         switch method {
         case .HEAD, .GET: return .init(method: method,
-                                       url: url + "?" + data.map { "\($0.0)=\($0.1.stringValue)" }.joined(separator: "&"),
+                                       url: url,
                                        headers: headers)
         default:
             let encodable: [String: String] = .init(uniqueKeysWithValues: data.map { ($0.0, $0.1.stringValue) })

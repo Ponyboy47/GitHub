@@ -5,7 +5,7 @@ import URITemplate
 public final class PublicGists: GitHubAPI {
     public typealias Response = [Gist]
 
-    public static let endpoint: URITemplate = "/gists/public"
+    public static let endpoint: URITemplate = "/gists/public{?since}"
 
     public let connector: GitHubConnector
 
