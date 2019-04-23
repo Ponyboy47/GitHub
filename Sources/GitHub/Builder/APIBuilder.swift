@@ -2,6 +2,8 @@ import HTTP
 import URITemplate
 
 public protocol RestfulAPI {
+    associatedtype BodyEncoder: DataEncoder
+    static var bodyEncoder: BodyEncoder { get }
     static var endpoint: URITemplate { get }
     static var requiredHeaders: HTTPHeaders { get }
     func call(parameters: [String: RestfulParameter], method: HTTPMethod) -> Future<HTTPResponse>
@@ -32,12 +34,15 @@ public extension RestfulAPI {
 
         switch method {
         case .HEAD, .GET: return .init(method: method,
-                                       url: url + "?" + parameters.map { "\($0.0)=\($0.1)" }.joined(separator: "&"),
+                                       url: url + "?" + data.map { "\($0.0)=\($0.1.stringValue)" }.joined(separator: "&"),
                                        headers: headers)
-        default: return .init(method: method,
-                              url: url,
-                              headers: headers,
-                              body: HTTPBody.empty)
+        default:
+            let encodable: [String: String] = .init(uniqueKeysWithValues: data.map { ($0.0, $0.1.stringValue) })
+            let encoded = try! Self.bodyEncoder.encode(encodable)
+            return .init(method: method,
+                         url: url,
+                         headers: headers,
+                         body: HTTPBody(data: encoded))
         }
     }
 }
@@ -59,6 +64,10 @@ extension RestfulAPI {
         return call(parameters: parameters, method: .PUT)
     }
 
+    func patch(parameters: [String: RestfulParameter]) -> Future<HTTPResponse> {
+        return call(parameters: parameters, method: .PATCH)
+    }
+
     func delete(parameters: [String: RestfulParameter]) -> Future<HTTPResponse> {
         return call(parameters: parameters, method: .DELETE)
     }
@@ -72,6 +81,10 @@ extension RestfulParameter where Self: RawRepresentable, RawValue == String {
     public var stringValue: String { return rawValue }
 }
 
+extension Bool: RestfulParameter {
+    public var stringValue: String { return "\(self)" }
+}
+
 extension String: RestfulParameter {
     public var stringValue: String { return self }
 }
@@ -83,3 +96,15 @@ extension Int: RestfulParameter {
 extension Double: RestfulParameter {
     public var stringValue: String { return "\(self)" }
 }
+
+extension Array: RestfulParameter where Element: RestfulParameter {
+    public var stringValue: String {
+        return map { $0.stringValue }.joined(separator: ",")
+    }
+}
+
+public protocol DataEncoder {
+    func encode<T>(_ value: T) throws -> Data where T: Encodable
+}
+
+extension JSONEncoder: DataEncoder {}

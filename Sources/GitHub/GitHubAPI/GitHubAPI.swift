@@ -3,10 +3,15 @@ import HTTP
 import NIO
 import URITemplate
 
-public protocol GitHubAPI: RestfulAPI {
+public protocol GitHubAPI: RestfulAPI where BodyEncoder == JSONEncoder {
     var connector: GitHubConnector { get }
 
     init(connector: GitHubConnector)
+}
+
+private let jsonEncoder = JSONEncoder()
+public extension GitHubAPI where BodyEncoder == JSONEncoder {
+    static var bodyEncoder: BodyEncoder { return jsonEncoder }
 }
 
 public extension GitHubAPI {
@@ -44,6 +49,10 @@ public extension GitHubAPI {
 
     func put<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
         return try call(parameters: parameters, method: .PUT)
+    }
+
+    func patch<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
+        return try call(parameters: parameters, method: .PATCH)
     }
 
     func delete<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
