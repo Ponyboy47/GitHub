@@ -55,4 +55,19 @@ public final class IDGist: GitHubAPI {
         connector.updated(headers: response.headers)
         return response.status == .noContent
     }
+
+    public func isStarred(_ id: String) throws -> Bool {
+        var options = [String: RestfulParameter]()
+        options["gistID"] = id
+        options["star"] = "star"
+
+        let response = try get(parameters: options).wait()
+        connector.updated(headers: response.headers)
+
+        guard [.noContent, .notFound].contains(response.status) else {
+            fatalError("Response failed with status: \(response.status)")
+        }
+
+        return response.status == .noContent
+    }
 }
