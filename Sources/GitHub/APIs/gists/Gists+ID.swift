@@ -1,9 +1,7 @@
 import URITemplate
 
 public final class IDGist: GitHubAPI {
-    public typealias Response = Gist
-
-    public static let endpoint: URITemplate = "/gists/{gistID}{/sha}"
+    public static let endpoint: URITemplate = "/gists/{gistID}{/sha,commits}"
 
     public let connector: GitHubConnector
 
@@ -11,10 +9,17 @@ public final class IDGist: GitHubAPI {
         self.connector = connector
     }
 
-    public func query(_ id: String, hash: String? = nil) throws -> Response {
+    public func get(_ id: String, hash: String? = nil) throws -> Gist {
         var options = [String: RestfulParameter]()
         options["gistID"] = id
         options["sha"] = hash
+        return try get(parameters: options)
+    }
+
+    public func commits(_ id: String) throws -> [GistCommit] {
+        var options = [String: RestfulParameter]()
+        options["gistID"] = id
+        options["commits"] = "commits"
         return try get(parameters: options)
     }
 }
