@@ -88,4 +88,13 @@ public final class IDGist: GitHubAPI {
 
         return try get(parameters: options)
     }
+
+    public func delete(_ id: String) throws -> Bool {
+        var options = [String: RestfulParameter]()
+        options["gistID"] = id
+
+        let response = try delete(parameters: options).wait()
+        connector.updated(headers: response.headers)
+        return response.status == .noContent
+    }
 }
