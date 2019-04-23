@@ -76,7 +76,7 @@ public final class GitHubConnector {
         return HTTPClient.connect(scheme: .https, hostname: "api.github.com", on: worker)
     }
 
-    fileprivate func updated(headers: HTTPHeaders) {
+    func updated(headers: HTTPHeaders) {
         rateLimit = headers.rateLimit
         rateLimitRemaining = headers.rateLimitRemaining
         rateLimitReset = headers.rateLimitReset

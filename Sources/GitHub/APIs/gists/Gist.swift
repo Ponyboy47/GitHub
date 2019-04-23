@@ -30,11 +30,13 @@ public struct Gist: GitHubResponseRepresentable, Hashable {
     public let user: User?
     public let owner: User
     public let truncated: Bool
+    public let forks: [GistFork]?
+    public let history: [GistCommit]?
 
     enum CodingKeys: String, CodingKey {
         case id, nodeID = "node_id", _api = "url", _forks = "forks_url", _commits = "commits_url",
             _gitPull = "git_pull_url", _gitPush = "git_push_url", _html = "html_url", _comments = "comments_url",
             files, `public`, created = "created_at", updated = "updated_at", description, comments, user, owner,
-            truncated
+            truncated, forks, history
     }
 }
