@@ -12,7 +12,7 @@ public final class SearchTopics: GitHubAPI {
         return headers
     }()
 
-    public static let endpoint: URITemplate = "/search/topics"
+    public static let endpoint: URITemplate = "/search/topics?q={+q}{&page,perPage}"
 
     public let connector: GitHubConnector
 

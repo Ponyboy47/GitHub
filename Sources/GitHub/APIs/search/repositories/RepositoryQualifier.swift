@@ -36,19 +36,19 @@ public extension RepositoryQualifier {
     }
 
     static func forks(greaterThan forks: Int) -> RepositoryQualifier {
-        return .init(rawValue: "forks:%3E\(forks)")
+        return .init(rawValue: "forks:>\(forks)")
     }
 
     static func forks(greaterThanOrEqualTo forks: Int) -> RepositoryQualifier {
-        return .init(rawValue: "forks:%3E=\(forks)")
+        return .init(rawValue: "forks:>=\(forks)")
     }
 
     static func forks(lessThan forks: Int) -> RepositoryQualifier {
-        return .init(rawValue: "forks:%3C\(forks)")
+        return .init(rawValue: "forks:<\(forks)")
     }
 
     static func forks(lessThanOrEqualTo forks: Int) -> RepositoryQualifier {
-        return .init(rawValue: "forks:%3C=\(forks)")
+        return .init(rawValue: "forks:<=\(forks)")
     }
 
     static func forks(between lowerBound: Int, and upperBound: Int) -> RepositoryQualifier {
@@ -76,19 +76,19 @@ public extension RepositoryQualifier {
     }
 
     static func stars(greaterThan stars: Int) -> RepositoryQualifier {
-        return .init(rawValue: "stars:%3E\(stars)")
+        return .init(rawValue: "stars:>\(stars)")
     }
 
     static func stars(greaterThanOrEqualTo stars: Int) -> RepositoryQualifier {
-        return .init(rawValue: "stars:%3E=\(stars)")
+        return .init(rawValue: "stars:>=\(stars)")
     }
 
     static func stars(lessThan stars: Int) -> RepositoryQualifier {
-        return .init(rawValue: "stars:%3C\(stars)")
+        return .init(rawValue: "stars:<\(stars)")
     }
 
     static func stars(lessThanOrEqualTo stars: Int) -> RepositoryQualifier {
-        return .init(rawValue: "stars:%3C=\(stars)")
+        return .init(rawValue: "stars:<=\(stars)")
     }
 
     static func stars(between lowerBound: Int, and upperBound: Int) -> RepositoryQualifier {
@@ -120,19 +120,19 @@ public extension RepositoryQualifier {
     }
 
     static func pushed(after date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:%3E\(date.iso8601)")
+        return .init(rawValue: "pushed:>\(date.iso8601)")
     }
 
     static func pushed(afterOrOn date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:%3E=\(date.iso8601)")
+        return .init(rawValue: "pushed:>=\(date.iso8601)")
     }
 
     static func pushed(before date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:%3C\(date.iso8601)")
+        return .init(rawValue: "pushed:<\(date.iso8601)")
     }
 
     static func pushed(beforeOrOn date: Date) -> RepositoryQualifier {
-        return .init(rawValue: "pushed:%3C=\(date.iso8601)")
+        return .init(rawValue: "pushed:<=\(date.iso8601)")
     }
 
     static func pushed(between lowerBound: Date, and upperBound: Date) -> RepositoryQualifier {
@@ -204,19 +204,19 @@ public extension RepositoryQualifier {
     }
 
     static func topics(greaterThan topics: Int) -> RepositoryQualifier {
-        return .init(rawValue: "topics:%3E\(topics)")
+        return .init(rawValue: "topics:>\(topics)")
     }
 
     static func topics(greaterThanOrEqualTo topics: Int) -> RepositoryQualifier {
-        return .init(rawValue: "topics:%3E=\(topics)")
+        return .init(rawValue: "topics:>=\(topics)")
     }
 
     static func topics(lessThan topics: Int) -> RepositoryQualifier {
-        return .init(rawValue: "topics:%3C\(topics)")
+        return .init(rawValue: "topics:<\(topics)")
     }
 
     static func topics(lessThanOrEqualTo topics: Int) -> RepositoryQualifier {
-        return .init(rawValue: "topics:%3C=\(topics)")
+        return .init(rawValue: "topics:<=\(topics)")
     }
 
     static func topics(between lowerBound: Int, and upperBound: Int) -> RepositoryQualifier {
@@ -326,10 +326,10 @@ extension RepositoryQualifier: ArchivedQualifiable {}
 
 public extension RepositoryQualifier {
     static func goodFirstIssues(greaterThan count: Int) -> RepositoryQualifier {
-        return .init(rawValue: "good-first-issues:%3E\(count)")
+        return .init(rawValue: "good-first-issues:>\(count)")
     }
 
     static func helpWantedIssues(greaterThan count: Int) -> RepositoryQualifier {
-        return .init(rawValue: "help-wanted-issues:%3E\(count)")
+        return .init(rawValue: "help-wanted-issues:>\(count)")
     }
 }

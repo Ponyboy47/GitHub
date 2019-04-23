@@ -37,19 +37,19 @@ public extension UserQualifier {
     }
 
     static func repos(greaterThan repos: Int) -> UserQualifier {
-        return .init(rawValue: "repos:%3E\(repos)")
+        return .init(rawValue: "repos:>\(repos)")
     }
 
     static func repos(greaterThanOrEqualTo repos: Int) -> UserQualifier {
-        return .init(rawValue: "repos:%3E=\(repos)")
+        return .init(rawValue: "repos:>=\(repos)")
     }
 
     static func repos(lessThan repos: Int) -> UserQualifier {
-        return .init(rawValue: "repos:%3C\(repos)")
+        return .init(rawValue: "repos:<\(repos)")
     }
 
     static func repos(lessThanOrEqualTo repos: Int) -> UserQualifier {
-        return .init(rawValue: "repos:%3C=\(repos)")
+        return .init(rawValue: "repos:<=\(repos)")
     }
 
     static func repos(between lowerBound: Int, and upperBound: Int) -> UserQualifier {
@@ -93,19 +93,19 @@ public extension UserQualifier {
     }
 
     static func followers(greaterThan followers: Int) -> UserQualifier {
-        return .init(rawValue: "followers:%3E\(followers)")
+        return .init(rawValue: "followers:>\(followers)")
     }
 
     static func followers(greaterThanOrEqualTo followers: Int) -> UserQualifier {
-        return .init(rawValue: "followers:%3E=\(followers)")
+        return .init(rawValue: "followers:>=\(followers)")
     }
 
     static func followers(lessThan followers: Int) -> UserQualifier {
-        return .init(rawValue: "followers:%3C\(followers)")
+        return .init(rawValue: "followers:<\(followers)")
     }
 
     static func followers(lessThanOrEqualTo followers: Int) -> UserQualifier {
-        return .init(rawValue: "followers:%3C=\(followers)")
+        return .init(rawValue: "followers:<=\(followers)")
     }
 
     static func followers(between lowerBound: Int, and upperBound: Int) -> UserQualifier {

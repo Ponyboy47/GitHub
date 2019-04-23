@@ -25,7 +25,7 @@ public final class SearchIssues: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint: URITemplate = "/search/issues"
+    public static let endpoint: URITemplate = "/search/issues?q={+q}{&sort,order,page,perPage}"
 
     public let connector: GitHubConnector
 

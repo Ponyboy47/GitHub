@@ -18,7 +18,7 @@ public final class SearchCommits: GitHubAPI {
         return headers
     }()
 
-    public static let endpoint: URITemplate = "/search/commits"
+    public static let endpoint: URITemplate = "/search/commits?q={+q}{&sort,order,page,perPage}"
 
     public let connector: GitHubConnector
 

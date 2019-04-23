@@ -191,19 +191,19 @@ public extension IssueQualifier {
     }
 
     static func comments(greaterThan comments: Int) -> IssueQualifier {
-        return .init(rawValue: "comments:%3E\(comments)")
+        return .init(rawValue: "comments:>\(comments)")
     }
 
     static func comments(greaterThanOrEqualTo comments: Int) -> IssueQualifier {
-        return .init(rawValue: "comments:%3E=\(comments)")
+        return .init(rawValue: "comments:>=\(comments)")
     }
 
     static func comments(lessThan comments: Int) -> IssueQualifier {
-        return .init(rawValue: "comments:%3C\(comments)")
+        return .init(rawValue: "comments:<\(comments)")
     }
 
     static func comments(lessThanOrEqualTo comments: Int) -> IssueQualifier {
-        return .init(rawValue: "comments:%3C=\(comments)")
+        return .init(rawValue: "comments:<=\(comments)")
     }
 
     static func comments(between lowerBound: Int, and upperBound: Int) -> IssueQualifier {
@@ -267,19 +267,19 @@ public extension IssueQualifier {
     }
 
     static func updated(after date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:%3E\(date.iso8601)")
+        return .init(rawValue: "updated:>\(date.iso8601)")
     }
 
     static func updated(afterOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:%3E=\(date.iso8601)")
+        return .init(rawValue: "updated:>=\(date.iso8601)")
     }
 
     static func updated(before date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:%3C\(date.iso8601)")
+        return .init(rawValue: "updated:<\(date.iso8601)")
     }
 
     static func updated(beforeOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "updated:%3C=\(date.iso8601)")
+        return .init(rawValue: "updated:<=\(date.iso8601)")
     }
 
     static func updated(between lowerBound: Date, and upperBound: Date) -> IssueQualifier {
@@ -303,19 +303,19 @@ public extension IssueQualifier {
     }
 
     static func closed(after date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:%3E\(date.iso8601)")
+        return .init(rawValue: "closed:>\(date.iso8601)")
     }
 
     static func closed(afterOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:%3E=\(date.iso8601)")
+        return .init(rawValue: "closed:>=\(date.iso8601)")
     }
 
     static func closed(before date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:%3C\(date.iso8601)")
+        return .init(rawValue: "closed:<\(date.iso8601)")
     }
 
     static func closed(beforeOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "closed:%3C=\(date.iso8601)")
+        return .init(rawValue: "closed:<=\(date.iso8601)")
     }
 
     static func closed(between lowerBound: Date, and upperBound: Date) -> IssueQualifier {
@@ -339,19 +339,19 @@ public extension IssueQualifier {
     }
 
     static func merged(after date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:%3E\(date.iso8601)")
+        return .init(rawValue: "merged:>\(date.iso8601)")
     }
 
     static func merged(afterOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:%3E=\(date.iso8601)")
+        return .init(rawValue: "merged:>=\(date.iso8601)")
     }
 
     static func merged(before date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:%3C\(date.iso8601)")
+        return .init(rawValue: "merged:<\(date.iso8601)")
     }
 
     static func merged(beforeOrOn date: Date) -> IssueQualifier {
-        return .init(rawValue: "merged:%3C=\(date.iso8601)")
+        return .init(rawValue: "merged:<=\(date.iso8601)")
     }
 
     static func merged(between lowerBound: Date, and upperBound: Date) -> IssueQualifier {

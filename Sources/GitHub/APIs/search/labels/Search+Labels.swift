@@ -18,7 +18,7 @@ public final class SearchLabels: GitHubAPI {
         return headers
     }()
 
-    public static let endpoint: URITemplate = "/search/labels"
+    public static let endpoint: URITemplate = "/search/labels?repository_id={repository_id}&q={+q}{&sort,order,page,perPage}"
 
     public let connector: GitHubConnector
 
@@ -39,8 +39,8 @@ public final class SearchLabels: GitHubAPI {
                       repositoryID id: Int,
                       sort: SortOptions = .default,
                       order: SortOrdering = .default,
-                      page _: Int = 1,
-                      perPage _: Int = githubPerPage) throws -> Response {
+                      page: Int = 1,
+                      perPage: Int = githubPerPage) throws -> Response {
         var options = [String: RestfulParameter]()
         options["repository_id"] = "\(id)"
         options["q"] = string
@@ -52,6 +52,8 @@ public final class SearchLabels: GitHubAPI {
                 options["sort"] = sort
             }
         }
+        options["page"] = page
+        options["perPage"] = perPage
 
         return try get(parameters: options)
     }

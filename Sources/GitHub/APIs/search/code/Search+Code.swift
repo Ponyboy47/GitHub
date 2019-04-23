@@ -11,7 +11,7 @@ public final class SearchCode: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint: URITemplate = "/search/code"
+    public static let endpoint: URITemplate = "/search/code?q={+q}{&sort,order,page,perPage}"
 
     public let connector: GitHubConnector
 

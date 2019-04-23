@@ -38,19 +38,19 @@ public extension CommitQualifier {
     }
 
     static func authored(after date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:%3E\(date.iso8601)")
+        return .init(rawValue: "author-date:>\(date.iso8601)")
     }
 
     static func authored(afterOrOn date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:%3E=\(date.iso8601)")
+        return .init(rawValue: "author-date:>=\(date.iso8601)")
     }
 
     static func authored(before date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:%3C\(date.iso8601)")
+        return .init(rawValue: "author-date:<\(date.iso8601)")
     }
 
     static func authored(beforeOrOn date: Date) -> CommitQualifier {
-        return .init(rawValue: "author-date:%3C=\(date.iso8601)")
+        return .init(rawValue: "author-date:<=\(date.iso8601)")
     }
 
     static func authored(between lowerBound: Date, and upperBound: Date) -> CommitQualifier {
@@ -74,19 +74,19 @@ public extension CommitQualifier {
     }
 
     static func committed(after date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:%3E\(date.iso8601)")
+        return .init(rawValue: "committer-date:>\(date.iso8601)")
     }
 
     static func committed(afterOrOn date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:%3E=\(date.iso8601)")
+        return .init(rawValue: "committer-date:>=\(date.iso8601)")
     }
 
     static func committed(before date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:%3C\(date.iso8601)")
+        return .init(rawValue: "committer-date:<\(date.iso8601)")
     }
 
     static func committed(beforeOrOn date: Date) -> CommitQualifier {
-        return .init(rawValue: "committer-date:%3C=\(date.iso8601)")
+        return .init(rawValue: "committer-date:<=\(date.iso8601)")
     }
 
     static func committed(between lowerBound: Date, and upperBound: Date) -> CommitQualifier {

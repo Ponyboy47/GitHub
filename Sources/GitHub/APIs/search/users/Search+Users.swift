@@ -13,7 +13,7 @@ public final class SearchUsers: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint: URITemplate = "/search/users"
+    public static let endpoint: URITemplate = "/search/users?q={+q}{&sort,order,page,perPage}"
 
     public let connector: GitHubConnector
 
