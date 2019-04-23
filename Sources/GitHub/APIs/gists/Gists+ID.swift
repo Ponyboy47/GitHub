@@ -36,15 +36,23 @@ public final class IDGist: GitHubAPI {
         return try patch(parameters: options)
     }
 
-    public func star(_ id: String) throws {
+    public func star(_ id: String) throws -> Bool {
         var options = [String: RestfulParameter]()
         options["gistID"] = id
         options["star"] = "star"
 
         let response = try put(parameters: options).wait()
         connector.updated(headers: response.headers)
-        guard response.status == .noContent else {
-            throw GitHubAPIError.failedToStar
-        }
+        return response.status == .noContent
+    }
+
+    public func unstar(_ id: String) throws -> Bool {
+        var options = [String: RestfulParameter]()
+        options["gistID"] = id
+        options["star"] = "unstar"
+
+        let response = try delete(parameters: options).wait()
+        connector.updated(headers: response.headers)
+        return response.status == .noContent
     }
 }
