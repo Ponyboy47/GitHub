@@ -1,7 +1,7 @@
 import URITemplate
 
 public final class IDGist: GitHubAPI {
-    public static let endpoint: URITemplate = "/gists/{gistID}{/sha,commits,star}"
+    public static let endpoint: URITemplate = "/gists/{gistID}{/sha,commits,star,forks}"
 
     public let connector: GitHubConnector
 
@@ -69,5 +69,13 @@ public final class IDGist: GitHubAPI {
         }
 
         return response.status == .noContent
+    }
+
+    public func fork(_ id: String) throws -> Gist {
+        var options = [String: RestfulParameter]()
+        options["gistID"] = id
+        options["forks"] = "forks"
+
+        return try post(parameters: options)
     }
 }
