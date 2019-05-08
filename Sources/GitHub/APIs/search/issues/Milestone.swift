@@ -1,6 +1,5 @@
 import struct Foundation.URL
 
-private var milestoneURLsCache = [Milestone: MilestoneURLs]()
 public struct Milestone: Decodable, Hashable {
     public let id: Int
     public let nodeID: String
@@ -8,13 +7,7 @@ public struct Milestone: Decodable, Hashable {
     public let title: String
     public let description: String
     public var urls: MilestoneURLs {
-        if let urls = milestoneURLsCache[self] {
-            return urls
-        }
-
-        let urls = MilestoneURLs(milestone: _api, html: _html, labels: _labels)
-        milestoneURLsCache[self] = urls
-        return urls
+        return MilestoneURLs(milestone: _api, html: _html, labels: _labels)
     }
 
     public let _api, _html, _labels: URL

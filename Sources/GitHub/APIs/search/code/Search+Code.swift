@@ -1,4 +1,3 @@
-import HTTP
 import URITemplate
 
 public final class SearchCode: GitHubAPI {
@@ -11,11 +10,11 @@ public final class SearchCode: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint: URITemplate = "/search/code?q={+q}{&sort,order,page,perPage}"
+    static let endpoint: URITemplate = "/search/code?q={+q}{&sort,order,page,perPage}"
 
-    public let connector: GitHubConnector
+    let connector: GitHubConnector
 
-    public init(connector: GitHubConnector) {
+    init(connector: GitHubConnector) {
         self.connector = connector
     }
 

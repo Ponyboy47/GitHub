@@ -1,11 +1,11 @@
 import URITemplate
 
 public final class IDGist: GitHubAPI {
-    public static let endpoint: URITemplate = "/gists/{gistID}{/sha,commits,star,forks}"
+    static let endpoint: URITemplate = "/gists/{gistID}{/sha,commits,star,forks}"
 
-    public let connector: GitHubConnector
+    let connector: GitHubConnector
 
-    public init(connector: GitHubConnector) {
+    init(connector: GitHubConnector) {
         self.connector = connector
     }
 

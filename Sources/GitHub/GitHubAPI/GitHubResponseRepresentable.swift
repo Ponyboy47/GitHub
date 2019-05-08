@@ -1,4 +1,4 @@
-import HTTP
+import struct Foundation.URL
 
 public protocol GitHubResponseRepresentable: Decodable {}
 

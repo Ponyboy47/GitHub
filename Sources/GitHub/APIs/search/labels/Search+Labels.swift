@@ -1,4 +1,4 @@
-import HTTP
+import struct NIOHTTP1.HTTPHeaders
 import URITemplate
 
 public final class SearchLabels: GitHubAPI {
@@ -12,17 +12,17 @@ public final class SearchLabels: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let requiredHeaders: HTTPHeaders = {
+    static let requiredHeaders: HTTPHeaders = {
         var headers = defaultAPIHeaders
-        headers.replaceOrAdd(name: .accept, value: "application/vnd.github.symmetra-preview+json")
+        headers.replaceOrAdd(name: "Accept", value: "application/vnd.github.symmetra-preview+json")
         return headers
     }()
 
-    public static let endpoint: URITemplate = "/search/labels?repository_id={repository_id}&q={+q}{&sort,order,page,perPage}"
+    static let endpoint: URITemplate = "/search/labels?repository_id={repository_id}&q={+q}{&sort,order,page,perPage}"
 
-    public let connector: GitHubConnector
+    let connector: GitHubConnector
 
-    public init(connector: GitHubConnector) {
+    init(connector: GitHubConnector) {
         self.connector = connector
     }
 

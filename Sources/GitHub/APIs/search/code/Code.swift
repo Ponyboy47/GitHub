@@ -1,20 +1,11 @@
 import struct Foundation.URL
 
-private var codeURLsCache = [Code: CodeURLs]()
 public struct Code: GitHubResponseElement, Hashable {
     public let name: String
     public let path: String
     public let sha: String
     public var urls: CodeURLs {
-        if let urls = codeURLsCache[self] {
-            return urls
-        }
-
-        let urls = CodeURLs(code: _api,
-                            git: _git,
-                            html: _html)
-        codeURLsCache[self] = urls
-        return urls
+        return CodeURLs(code: _api, git: _git, html: _html)
     }
 
     public let _api: URL

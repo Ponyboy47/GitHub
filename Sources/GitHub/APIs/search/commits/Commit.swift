@@ -1,18 +1,10 @@
 import struct Foundation.URL
 
-private var commitURLsCache: [Commit: CommitURLs] = [:]
 public struct Commit: GitHubResponseElement, Hashable {
     public let sha: String
     public let nodeID: String
     public var urls: CommitURLs {
-        if let urls = commitURLsCache[self] {
-            return urls
-        }
-        let urls = CommitURLs(api: _api,
-                              html: _html,
-                              comments: _comments)
-        commitURLsCache[self] = urls
-        return urls
+        return CommitURLs(api: _api, html: _html, comments: _comments)
     }
 
     public let _api: URL

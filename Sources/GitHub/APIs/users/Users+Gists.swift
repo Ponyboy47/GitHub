@@ -1,10 +1,10 @@
 import struct Foundation.Date
 import URITemplate
 
-public final class PublicGists: GitHubAPI {
+public final class UsersGists: GitHubAPI {
     public typealias Response = [Gist]
 
-    static let endpoint: URITemplate = "/gists/public{?since}"
+    static let endpoint: URITemplate = "/users/{username}/gists"
 
     let connector: GitHubConnector
 
@@ -12,8 +12,9 @@ public final class PublicGists: GitHubAPI {
         self.connector = connector
     }
 
-    public func query(since date: Date? = nil) throws -> Response {
+    public func query(_ username: String, since date: Date? = nil) throws -> Response {
         var options = [String: RestfulParameter]()
+        options["username"] = username
         if let date = date {
             options["since"] = date.iso8601
         }

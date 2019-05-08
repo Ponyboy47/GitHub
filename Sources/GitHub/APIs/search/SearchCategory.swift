@@ -9,7 +9,7 @@ public final class SearchCategory {
     public let topics: SearchTopics
     public let labels: SearchLabels
 
-    public init(connector: GitHubConnector) {
+    init(connector: GitHubConnector) {
         repositories = .init(connector: connector)
         commits = .init(connector: connector)
         code = .init(connector: connector)

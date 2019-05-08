@@ -12,7 +12,7 @@ let package = Package(
             targets: ["GitHub"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/http.git", from: "3.0.0"),
+        .package(url: "https://github.com/swift-server/swift-nio-http-client.git", .branch("master")),
         .package(url: "https://github.com/Ponyboy47/URITemplate.swift.git", from: "3.0.0"),
     ],
     targets: [
@@ -20,7 +20,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "GitHub",
-            dependencies: ["HTTP", "URITemplate"]),
+            dependencies: ["NIOHTTPClient", "URITemplate"]),
         .testTarget(
             name: "GitHubTests",
             dependencies: ["GitHub"]),

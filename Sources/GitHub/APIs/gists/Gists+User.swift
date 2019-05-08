@@ -1,5 +1,4 @@
 import struct Foundation.Date
-import HTTP
 import URITemplate
 
 public final class UserGists: GitHubAPI {
@@ -7,9 +6,9 @@ public final class UserGists: GitHubAPI {
 
     public static let endpoint: URITemplate = "/gists{?since}"
 
-    public let connector: GitHubConnector
+    let connector: GitHubConnector
 
-    public init(connector: GitHubConnector) {
+    init(connector: GitHubConnector) {
         self.connector = connector
     }
 

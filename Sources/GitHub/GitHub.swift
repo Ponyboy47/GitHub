@@ -1,8 +1,9 @@
+import struct Foundation.Data
 import struct Foundation.Date
-import HTTP
+import struct NIOHTTP1.HTTPHeaders
 
 public final class GitHub {
-    public let connector: GitHubConnector
+    let connector: GitHubConnector
     public var rateLimit: Int? { return connector.rateLimit }
     public var rateLimitRemaining: Int? { return connector.rateLimitRemaining }
     public var rateLimitReset: Date? { return connector.rateLimitReset }
@@ -59,6 +60,20 @@ public struct GitHubAuth {
     // }
 }
 
+public struct BasicAuthorization {
+    let headerValue: String
+
+    public init(username: String, password: String) {
+        let data = "\(username):\(password)".data(using: .ascii)
+
+        headerValue = data!.base64EncodedString(options: .init(rawValue: 0))
+    }
+
+    fileprivate init(_ headerValue: String) {
+        self.headerValue = headerValue
+    }
+}
+
 public extension GitHub {
     convenience init(basic: BasicAuthorization) {
         self.init(auth: .init(basic: basic))
@@ -66,6 +81,24 @@ public extension GitHub {
 
     convenience init(username: String, password: String) {
         self.init(auth: .init(username: username, password: password))
+    }
+}
+
+extension HTTPHeaders {
+    var basicAuthorization: BasicAuthorization? {
+        get {
+            guard let string = self["Authorization"].first else { return nil }
+            guard let range = string.range(of: "Basic ") else { return nil }
+            let token = string[range.upperBound...]
+            return .init(String(token))
+        }
+        set {
+            if let basic = newValue {
+                replaceOrAdd(name: "Authorization", value: "Basic \(basic.headerValue)")
+            } else {
+                remove(name: "Authorization")
+            }
+        }
     }
 }
 
@@ -86,16 +119,16 @@ public extension GitHub {
 extension HTTPHeaders {
     var tokenAuthorization: TokenAuthorization? {
         get {
-            guard let string = self[.authorization].first else { return nil }
+            guard let string = self["Authorization"].first else { return nil }
             guard let range = string.range(of: "Token ") else { return nil }
             let token = string[range.upperBound...]
             return .init(token: String(token))
         }
         set {
             if let token = newValue {
-                replaceOrAdd(name: .authorization, value: "Token \(token.token)")
+                replaceOrAdd(name: "Authorization", value: "Token \(token.token)")
             } else {
-                remove(name: .authorization)
+                remove(name: "Authorization")
             }
         }
     }

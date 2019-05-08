@@ -1,17 +1,10 @@
 import struct Foundation.URL
 import URITemplate
 
-private var issueURLsCache = [Issue: IssueURLs]()
 public struct Issue: GitHubResponseElement, Hashable {
     public var urls: IssueURLs {
-        if let urls = issueURLsCache[self] {
-            return urls
-        }
-
-        let urls = IssueURLs(issue: _api, repository: _repository, labels: _labels, comments: _comments,
-                             events: _events, html: _html)
-        issueURLsCache[self] = urls
-        return urls
+        return IssueURLs(issue: _api, repository: _repository, labels: _labels, comments: _comments,
+                         events: _events, html: _html)
     }
 
     public let _api, _repository, _comments, _events, _html: URL

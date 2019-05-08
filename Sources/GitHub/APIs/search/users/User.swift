@@ -11,11 +11,11 @@ public struct User: GitHubResponseElement, Hashable {
     public let id: Int
     public let nodeID: String
     public let gravatarID: String
-    public lazy var urls: UserURLs = {
-        UserURLs(user: _api, avatar: _avatar, html: _html, followers: _followers, following: _following,
-                 gists: _gists, starred: _starred, subscriptions: _subscriptions, organization: _organizations,
-                 repos: _repos, events: _events, receivedEvents: _receivedEvents)
-    }()
+    public var urls: UserURLs {
+        return UserURLs(user: _api, avatar: _avatar, html: _html, followers: _followers, following: _following,
+                        gists: _gists, starred: _starred, subscriptions: _subscriptions, organization: _organizations,
+                        repos: _repos, events: _events, receivedEvents: _receivedEvents)
+    }
 
     public let _api, _avatar, _html, _followers, _subscriptions, _organizations, _repos, _receivedEvents: URL
     public let _following, _gists, _starred, _events: URITemplate

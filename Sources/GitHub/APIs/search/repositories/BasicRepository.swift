@@ -1,7 +1,6 @@
 import struct Foundation.URL
 import URITemplate
 
-private var basicRepositoryURLsCache = [BasicRepository: BasicRepositoryURLs]()
 public struct BasicRepository: Decodable, Hashable {
     public let id: Int
     public let nodeID: String
@@ -12,25 +11,18 @@ public struct BasicRepository: Decodable, Hashable {
     public let description: String
     public let fork: Bool
     public var urls: BasicRepositoryURLs {
-        if let urls = basicRepositoryURLsCache[self] {
-            return urls
-        }
-
-        let urls = BasicRepositoryURLs(repository: _api, html: _html, forks: _forks, keys: _keys,
-                                       collaborators: _collaborators, teams: _teams, hooks: _hooks,
-                                       issueEvents: _issueEvents, events: _events, assignees: _assignees,
-                                       branches: _branches, tags: _tags, blobs: _blobs, gitTags: _gitTags,
-                                       gitRefs: _gitRefs, trees: _trees, statuses: _statuses, languages: _languages,
-                                       stargazers: _stargazers, contributors: _contributors, subscribers: _subscribers,
-                                       subscription: _subscription, commits: _commits, gitCommits: _gitCommits,
-                                       comments: _comments, issueComment: _issueComment, contents: _contents,
-                                       compare: _compare, merges: _merges, archive: _archive, downloads: _downloads,
-                                       issues: _issues, pulls: _pulls, milestones: _milestones,
-                                       notifications: _notifications, labels: _labels, releases: _releases,
-                                       deployments: _deployments)
-        basicRepositoryURLsCache[self] = urls
-
-        return urls
+        return BasicRepositoryURLs(repository: _api, html: _html, forks: _forks, keys: _keys,
+                                   collaborators: _collaborators, teams: _teams, hooks: _hooks,
+                                   issueEvents: _issueEvents, events: _events, assignees: _assignees,
+                                   branches: _branches, tags: _tags, blobs: _blobs, gitTags: _gitTags,
+                                   gitRefs: _gitRefs, trees: _trees, statuses: _statuses, languages: _languages,
+                                   stargazers: _stargazers, contributors: _contributors, subscribers: _subscribers,
+                                   subscription: _subscription, commits: _commits, gitCommits: _gitCommits,
+                                   comments: _comments, issueComment: _issueComment, contents: _contents,
+                                   compare: _compare, merges: _merges, archive: _archive, downloads: _downloads,
+                                   issues: _issues, pulls: _pulls, milestones: _milestones,
+                                   notifications: _notifications, labels: _labels, releases: _releases,
+                                   deployments: _deployments)
     }
 
     public let _api, _html, _forks, _teams, _hooks, _events, _tags, _languages, _stargazers, _contributors,

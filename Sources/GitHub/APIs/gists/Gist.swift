@@ -1,17 +1,11 @@
 import struct Foundation.URL
 
-private var gistURLs = [Gist: GistURLs]()
 public struct Gist: GitHubResponseRepresentable, Hashable {
     public let id: String
     public let nodeID: String
     public var urls: GistURLs {
-        if let urls = gistURLs[self] {
-            return urls
-        }
-        let urls = GistURLs(api: _api, forks: _forks, commits: _commits, gitPull: _gitPull, gitPush: _gitPush,
-                            html: _html, comments: _comments)
-        gistURLs[self] = urls
-        return urls
+        return GistURLs(api: _api, forks: _forks, commits: _commits, gitPull: _gitPull, gitPush: _gitPush,
+                        html: _html, comments: _comments)
     }
 
     public let _api: URL

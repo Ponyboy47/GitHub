@@ -1,15 +1,14 @@
 import struct Foundation.Date
-import HTTP
 import URITemplate
 
 public final class StarredGists: GitHubAPI {
     public typealias Response = [Gist]
 
-    public static let endpoint: URITemplate = "/gists/starred{?since}"
+    static let endpoint: URITemplate = "/gists/starred{?since}"
 
-    public let connector: GitHubConnector
+    let connector: GitHubConnector
 
-    public init(connector: GitHubConnector) {
+    init(connector: GitHubConnector) {
         self.connector = connector
     }
 

@@ -1,4 +1,3 @@
-import HTTP
 import URITemplate
 
 public typealias SearchPullRequests = SearchIssues
@@ -25,11 +24,11 @@ public final class SearchIssues: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    public static let endpoint: URITemplate = "/search/issues?q={+q}{&sort,order,page,perPage}"
+    static let endpoint: URITemplate = "/search/issues?q={+q}{&sort,order,page,perPage}"
 
-    public let connector: GitHubConnector
+    let connector: GitHubConnector
 
-    public init(connector: GitHubConnector) {
+    init(connector: GitHubConnector) {
         self.connector = connector
     }
 

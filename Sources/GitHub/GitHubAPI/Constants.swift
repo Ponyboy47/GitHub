@@ -1,15 +1,25 @@
-import HTTP
+import class Foundation.JSONDecoder
+import class NIO.EventLoopFuture
+import enum NIO.System
+import struct NIOHTTP1.HTTPHeaders
+import class NIOHTTPClient.HTTPClient
 
-public var numberOfThreads = System.coreCount
-public let URLPathSeparator = "/"
+typealias HTTPResponse = HTTPClient.Response
+typealias HTTPRequest = HTTPClient.Request
+typealias HTTPBody = HTTPClient.Body
+typealias Future = EventLoopFuture
+
+let numberOfThreads = System.coreCount
+let URLPathSeparator = "/"
+public let githubURL = "https://api.github.com"
 public let githubPerPageDefault = 30
 public let githubPerPageMax = 100
 public var githubPerPage = githubPerPageDefault
-public let githubBodyDecoder = JSONDecoder()
-public let defaultAPIHeaders: HTTPHeaders = [
+let githubBodyDecoder = JSONDecoder()
+let defaultAPIHeaders: HTTPHeaders = [
     "Accept": "application/vnd.github.v3+json",
     "User-Agent": "GitHubAPI-SPM-Library"
 ]
-public let githubRateLimitHeader = HTTPHeaderName("X-RateLimit-Limit")
-public let githubRateLimitRemainingHeader = HTTPHeaderName("X-RateLimit-Remaining")
-public let githubRateLimitResetHeader = HTTPHeaderName("X-RateLimit-Reset")
+let githubRateLimitHeader = "X-RateLimit-Limit"
+let githubRateLimitRemainingHeader = "X-RateLimit-Remaining"
+let githubRateLimitResetHeader = "X-RateLimit-Reset"

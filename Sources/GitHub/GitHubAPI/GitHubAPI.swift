@@ -1,28 +1,34 @@
+import struct Foundation.Data
 import struct Foundation.Date
-import HTTP
-import NIO
+import class Foundation.JSONEncoder
+import struct Foundation.TimeInterval
+import class NIO.MultiThreadedEventLoopGroup
+import struct NIOHTTP1.HTTPHeaders
+import enum NIOHTTP1.HTTPMethod
+import class NIOHTTPClient.HTTPClient
 import URITemplate
 
-public protocol GitHubAPI: RestfulAPI where BodyEncoder == JSONEncoder {
+protocol GitHubAPI: RestfulAPI where BodyEncoder == JSONEncoder {
     var connector: GitHubConnector { get }
 
     init(connector: GitHubConnector)
 }
 
 private let jsonEncoder = JSONEncoder()
-public extension GitHubAPI where BodyEncoder == JSONEncoder {
+extension GitHubAPI where BodyEncoder == JSONEncoder {
     static var bodyEncoder: BodyEncoder { return jsonEncoder }
 }
 
-public extension GitHubAPI {
+extension GitHubAPI {
+    static var url: String { return githubURL }
     static var requiredHeaders: HTTPHeaders { return defaultAPIHeaders }
 
     var rateLimit: Int? { return connector.rateLimit }
     var rateLimitRemaining: Int? { return connector.rateLimitRemaining }
     var rateLimitReset: Date? { return connector.rateLimitReset }
 
-    func call(parameters: [String: RestfulParameter], method: HTTPMethod) -> Future<HTTPResponse> {
-        let request = generateRequest(parameters: parameters, method: method)
+    func call(parameters: [String: RestfulParameter], method: HTTPMethod) throws -> Future<HTTPResponse> {
+        let request = try generateRequest(parameters: parameters, method: method)
         return connector.send(request: request)
     }
 
@@ -32,15 +38,14 @@ public extension GitHubAPI {
         guard response.status == .ok else {
             fatalError("Response failed with status: \(response.status)")
         }
-        return try githubBodyDecoder.decode(R.self, from: response.body.description)
+        guard var bytes = response.body, let data = bytes.readDispatchData(length: bytes.readableBytes) else {
+            fatalError("Empty response body")
+        }
+        return try githubBodyDecoder.decode(R.self, from: Data(data))
     }
 
     func get<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
         return try call(parameters: parameters, method: .GET)
-    }
-
-    func head<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
-        return try call(parameters: parameters, method: .HEAD)
     }
 
     func post<R: GitHubResponseRepresentable>(parameters: [String: RestfulParameter]) throws -> R {
@@ -60,8 +65,9 @@ public extension GitHubAPI {
     }
 }
 
-public final class GitHubConnector {
+final class GitHubConnector {
     private let worker = MultiThreadedEventLoopGroup(numberOfThreads: numberOfThreads)
+    private let client: HTTPClient
 
     let auth: GitHubAuth?
     public private(set) var rateLimit: Int?
@@ -70,10 +76,7 @@ public final class GitHubConnector {
 
     public init(auth: GitHubAuth?) {
         self.auth = auth
-    }
-
-    private func connect() -> Future<HTTPClient> {
-        return HTTPClient.connect(scheme: .https, hostname: "api.github.com", on: worker)
+        client = HTTPClient(eventLoopGroupProvider: .shared(worker))
     }
 
     func updated(headers: HTTPHeaders) {
@@ -92,13 +95,15 @@ public final class GitHubConnector {
             }
         }
 
-        return connect().flatMap(to: HTTPResponse.self) { client in
-            client.send(req)
-        }
+        return client.execute(request: request)
     }
 }
 
 private extension HTTPHeaders {
+    func firstValue(name: String) -> String? {
+        return self[name].first
+    }
+
     var rateLimit: Int? {
         guard let value = firstValue(name: githubRateLimitHeader) else { return nil }
         return Int(value)
