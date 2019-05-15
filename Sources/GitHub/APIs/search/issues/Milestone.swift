@@ -17,7 +17,7 @@ public struct Milestone: Decodable, Hashable {
     public let state: IssueState
     public let created: GitHubDate
     public let updated: GitHubDate
-    public let due: GitHubDate
+    public let due: GitHubDate?
     public let closed: GitHubDate?
 
     enum CodingKeys: String, CodingKey {
