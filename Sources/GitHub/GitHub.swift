@@ -1,6 +1,7 @@
 import struct Foundation.Data
 import struct Foundation.Date
 import struct NIOHTTP1.HTTPHeaders
+import class NIOHTTPClient.HTTPClient
 
 public final class GitHub {
     private let connector: GitHubConnector
@@ -13,6 +14,12 @@ public final class GitHub {
 
     public init(auth: GitHubAuth? = nil) {
         self.connector = GitHubConnector(auth: auth)
+    }
+
+    public func authenticate() throws -> Bool {
+        let req = try HTTPRequest(url: githubURL, method: .GET)
+        let response = try connector.send(request: req).wait()
+        return response.status == .ok
     }
 }
 
