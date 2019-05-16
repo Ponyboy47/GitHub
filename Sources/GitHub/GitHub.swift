@@ -1,7 +1,6 @@
 import struct Foundation.Data
 import struct Foundation.Date
 import struct NIOHTTP1.HTTPHeaders
-import class NIOHTTPClient.HTTPClient
 
 public final class GitHub {
     private let connector: GitHubConnector
