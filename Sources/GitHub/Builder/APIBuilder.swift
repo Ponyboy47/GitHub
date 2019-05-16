@@ -20,13 +20,13 @@ extension RestfulAPI {
         if let page = data["page"] as? Int, page <= 1 {
             data.removeValue(forKey: "page")
         }
-        if let perPage = data["perPage"] as? Int {
+        if let perPage = data["per_page"] as? Int {
             if perPage == githubPerPage {
-                data.removeValue(forKey: "perPage")
+                data.removeValue(forKey: "per_page")
             } else if perPage < 1 {
-                data["perPage"] = 1
+                data["per_page"] = 1
             } else if perPage > githubPerPageMax {
-                data["perPage"] = githubPerPageMax
+                data["per_page"] = githubPerPageMax
             }
         }
         let url = "\(Self.url)\(Self.endpoint.expand(data))"
