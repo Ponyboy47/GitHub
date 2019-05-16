@@ -3,20 +3,16 @@ import struct Foundation.Date
 import struct NIOHTTP1.HTTPHeaders
 
 public final class GitHub {
-    let connector: GitHubConnector
+    private let connector: GitHubConnector
     public var rateLimit: Int? { return connector.rateLimit }
     public var rateLimitRemaining: Int? { return connector.rateLimitRemaining }
     public var rateLimitReset: Date? { return connector.rateLimitReset }
 
-    public let search: SearchCategory
-    public let gists: GistsAPICollection
+    public private(set) lazy var search = SearchCategory(connector: connector)
+    public private(set) lazy var gists = GistsAPICollection(connector: connector)
 
     public init(auth: GitHubAuth? = nil) {
-        let connector = GitHubConnector(auth: auth)
-
-        self.connector = connector
-        search = .init(connector: connector)
-        gists = .init(connector: connector)
+        self.connector = GitHubConnector(auth: auth)
     }
 }
 

@@ -1,13 +1,12 @@
 public final class GistsAPICollection {
-    public var user: UserGists
-    public var `public`: PublicGists
-    public var starred: StarredGists
-    public var id: IDGist
+    private let connector: GitHubConnector
+
+    public private(set) lazy var user = UserGists(connector: connector)
+    public private(set) lazy var `public` = PublicGists(connector: connector)
+    public private(set) lazy var starred = StarredGists(connector: connector)
+    public private(set) lazy var id = IDGist(connector: connector)
 
     init(connector: GitHubConnector) {
-        self.user = .init(connector: connector)
-        self.public = .init(connector: connector)
-        self.starred = .init(connector: connector)
-        self.id = .init(connector: connector)
+        self.connector = connector
     }
 }

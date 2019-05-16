@@ -1,21 +1,17 @@
 import struct Foundation.Date
 
 public final class SearchCategory {
-    public let repositories: SearchRepositories
-    public let commits: SearchCommits
-    public let code: SearchCode
-    public let issues: SearchIssues
-    public let users: SearchUsers
-    public let topics: SearchTopics
-    public let labels: SearchLabels
+    private let connector: GitHubConnector
+
+    public private(set) lazy var repositories = SearchRepositories(connector: connector)
+    public private(set) lazy var commits = SearchCommits(connector: connector)
+    public private(set) lazy var code = SearchCode(connector: connector)
+    public private(set) lazy var issues = SearchIssues(connector: connector)
+    public private(set) lazy var users = SearchUsers(connector: connector)
+    public private(set) lazy var topics = SearchTopics(connector: connector)
+    public private(set) lazy var labels = SearchLabels(connector: connector)
 
     init(connector: GitHubConnector) {
-        repositories = .init(connector: connector)
-        commits = .init(connector: connector)
-        code = .init(connector: connector)
-        issues = .init(connector: connector)
-        users = .init(connector: connector)
-        topics = .init(connector: connector)
-        labels = .init(connector: connector)
+        self.connector = connector
     }
 }
