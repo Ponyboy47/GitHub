@@ -70,11 +70,11 @@ final class GitHubConnector {
     private let client: HTTPClient
 
     let auth: GitHubAuth?
-    public private(set) var rateLimit: Int?
-    public private(set) var rateLimitRemaining: Int?
-    public private(set) var rateLimitReset: Date?
+    private(set) var rateLimit: Int?
+    private(set) var rateLimitRemaining: Int?
+    private(set) var rateLimitReset: Date?
 
-    public init(auth: GitHubAuth?) {
+    init(auth: GitHubAuth?) {
         self.auth = auth
         client = HTTPClient(eventLoopGroupProvider: .shared(worker))
     }
@@ -85,7 +85,7 @@ final class GitHubConnector {
         rateLimitReset = headers.rateLimitReset
     }
 
-    fileprivate func send(request: HTTPRequest) -> Future<HTTPResponse> {
+    func send(request: HTTPRequest) -> Future<HTTPResponse> {
         var req = request
         if let auth = auth {
             if let basic = auth.basic {
