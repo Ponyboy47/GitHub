@@ -12,7 +12,7 @@ public final class SearchTopics: GitHubAPI {
         return headers
     }()
 
-    static let endpoint: URITemplate = "/search/topics?q={+q}{&page,perPage}"
+    static let endpoint: URITemplate = "/search/topics?q={+query}{&page,per_page}"
 
     let connector: GitHubConnector
 
@@ -38,9 +38,9 @@ public final class SearchTopics: GitHubAPI {
                       page: Int = 1,
                       perPage: Int = githubPerPage) throws -> Response {
         var options = [String: RestfulParameter]()
-        options["q"] = string
+        options["query"] = string
         options["page"] = page
-        options["perPage"] = perPage
+        options["per_page"] = perPage
 
         return try get(parameters: options)
     }

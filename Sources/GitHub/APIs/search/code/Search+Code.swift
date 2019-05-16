@@ -10,7 +10,7 @@ public final class SearchCode: GitHubAPI {
         public static let `default`: SortOptions = .bestMatch
     }
 
-    static let endpoint: URITemplate = "/search/code?q={+q}{&sort,order,page,perPage}"
+    static let endpoint: URITemplate = "/search/code?q={+query}{&sort,order,page,per_page}"
 
     let connector: GitHubConnector
 
@@ -42,7 +42,7 @@ public final class SearchCode: GitHubAPI {
                       page: Int = 1,
                       perPage: Int = githubPerPage) throws -> Response {
         var options = [String: RestfulParameter]()
-        options["q"] = string
+        options["query"] = string
         if order != .default {
             options["order"] = order
 
@@ -52,7 +52,7 @@ public final class SearchCode: GitHubAPI {
             }
         }
         options["page"] = page
-        options["perPage"] = perPage
+        options["per_page"] = perPage
 
         return try get(parameters: options)
     }
